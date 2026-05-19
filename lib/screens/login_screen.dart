@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,143 +22,187 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF091a47), Color(0xFF081F5D)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF041029), Color(0xFF08254F)],
           ),
         ),
         child: Center(
-          child: SizedBox(
-            width: 350,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topCenter,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 84),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                      border: const Border(
-                        top: BorderSide(color: Color(0xFFb40404), width: 6),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(128),
-                          blurRadius: 10,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.fromLTRB(24, 96, 24, 24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('USERNAME',
-                          style: TextStyle(
-                            color: Color(0x990F1A3B),
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        TextField(
-                          controller: _usernameCtrl,
-                          decoration: InputDecoration(
-                            hintText: 'Enter your username',
-                            filled: true,
-                            fillColor: const Color(0x30000000),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: const EdgeInsets.all(12),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'PASSWORD',
-                          style: TextStyle(
-                            color: Color(0x990F1A3B),
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        TextField(
-                          controller: _passwordCtrl,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: 'Enter your password',
-                            filled: true,
-                            fillColor: const Color(0x30000000),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: const EdgeInsets.all(12),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Divider(color: Colors.white70, thickness: 2),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: _login,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFad0808),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            child: const Text(
-                              'SIGN IN',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF091a47),
-                      shape: BoxShape.circle,
-                    ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+            child: SizedBox(
+              width: 420,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topCenter,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 84),
                     child: Container(
-                      width: 160,
-                      height: 160,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'images/mccLogo.png',
-                          fit: BoxFit.cover,
-                          errorBuilder: (ctx, err, st) => const Icon(
-                            Icons.school,
-                            size: 1000000,
-                            color: Color(0xFF030357),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: AppColors.border),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.35),
+                            blurRadius: 30,
+                            offset: const Offset(0, 14),
                           ),
-                        ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.fromLTRB(32, 120, 32, 32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Secure Admin Access',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Sign in to monitor campus security and manage violation response.',
+                            style: TextStyle(
+                              color: AppColors.muted,
+                              fontSize: 14,
+                              height: 1.5,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          const Text(
+                            'USERNAME',
+                            style: TextStyle(
+                              color: AppColors.muted,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: _usernameCtrl,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              hintText: 'admin@mcc.edu',
+                              hintStyle: const TextStyle(
+                                color: AppColors.muted,
+                              ),
+                              filled: true,
+                              fillColor: AppColors.inputBg,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 18,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'PASSWORD',
+                            style: TextStyle(
+                              color: AppColors.muted,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: _passwordCtrl,
+                            obscureText: true,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              hintText: 'Enter your secure password',
+                              hintStyle: const TextStyle(
+                                color: AppColors.muted,
+                              ),
+                              filled: true,
+                              fillColor: AppColors.inputBg,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 18,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _login,
+                              child: const Text(
+                                'SIGN IN',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'Last login: Today',
+                                style: TextStyle(
+                                  color: AppColors.muted,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                'Secure session',
+                                style: TextStyle(
+                                  color: AppColors.accent,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: 0,
+                    child: Container(
+                      width: 150,
+                      height: 150,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF4FD1C5), Color(0xFF0F5AB0)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.accent.withOpacity(0.3),
+                            blurRadius: 24,
+                            offset: const Offset(0, 16),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.security,
+                        color: Colors.white,
+                        size: 72,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

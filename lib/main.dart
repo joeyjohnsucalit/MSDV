@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 import 'screens/login_screen.dart';
 import 'screens/main_shell.dart';
 
@@ -15,8 +16,47 @@ class MsdvApp extends StatelessWidget {
       title: 'MSDV | MCC Student Violation System',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF1F4F9),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF030357)),
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: AppColors.background,
+        primaryColor: AppColors.primary,
+        colorScheme: const ColorScheme.dark(
+          primary: AppColors.primary,
+          secondary: AppColors.accent,
+          background: AppColors.background,
+          surface: AppColors.surface,
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onBackground: Colors.white70,
+          onSurface: Colors.white70,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.navbarBg,
+          elevation: 0,
+          foregroundColor: Colors.white,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: AppColors.inputBg,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          hintStyle: const TextStyle(color: AppColors.muted),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.accent,
+            foregroundColor: Colors.black87,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+        ),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white70),
+          titleLarge: TextStyle(color: Colors.white),
+        ),
         fontFamily: 'Arial',
       ),
       initialRoute: '/',
