@@ -12,8 +12,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordCtrl = TextEditingController();
 
   void _login() {
-    final username = _usernameCtrl.text.trim();
-    final password = _passwordCtrl.text;
+    final username = _usernameCtrl.text.trim().toLowerCase();
+    final password = _passwordCtrl.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      _showError('Please enter both username and password.');
+      return;
+    }
 
     if (username == 'admin' && password == 'admin123') {
       Navigator.pushReplacementNamed(context, '/main');
