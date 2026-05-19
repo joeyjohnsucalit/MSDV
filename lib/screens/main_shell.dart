@@ -11,6 +11,9 @@ import 'import_data_screen.dart';
 import 'jassu_users_screen.dart';
 
 const double _kMobileBreak = 768;
+const double _kTabletBreak = 1080;
+const double _kSidebarWidth = 280;
+const double _kCompactSidebarWidth = 240;
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -54,8 +57,9 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
     final isMobile = width < _kMobileBreak;
-
+    final isTablet = width >= _kMobileBreak && width < _kTabletBreak;
     final sidebar = SidebarWidget(
+      width: isMobile ? 270 : (isTablet ? _kCompactSidebarWidth : _kSidebarWidth),
       currentPage: _currentPage,
       onPageChange: _navigate,
       onLogout: () {
@@ -64,44 +68,54 @@ class _MainShellState extends State<MainShell> {
       },
     );
 
+    Widget contentArea = Column(
+      children: [
+        _TopNavbar(
+          title: _pageTitle,
+          showMenu: isMobile,
+          onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+        Expanded(child: _pageContent),
+      ],
+    );
+
     if (isMobile) {
       return Scaffold(
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
         drawer: Drawer(
           width: 270,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           child: sidebar,
         ),
-        body: Column(
-          children: [
-            _TopNavbar(
-              title: _pageTitle,
-              showMenu: true,
-              onMenuTap: () =>
-                  _scaffoldKey.currentState?.openDrawer(),
-            ),
-            Expanded(child: _pageContent),
-          ],
+        body: SafeArea(child: contentArea),
+      );
+    }
+
+    if (isTablet) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Row(
+            children: [
+              SizedBox(width: _kCompactSidebarWidth, child: sidebar),
+              const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE2E8F0)),
+              Expanded(child: contentArea),
+            ],
+          ),
         ),
       );
     }
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Row(
-        children: [
-          sidebar,
-          Expanded(
-            child: Column(
-              children: [
-                _TopNavbar(title: _pageTitle),
-                Expanded(child: _pageContent),
-              ],
-            ),
-          ),
-        ],
+      body: SafeArea(
+        child: Row(
+          children: [
+            SizedBox(width: _kSidebarWidth, child: sidebar),
+            Expanded(child: contentArea),
+          ],
+        ),
       ),
     );
   }

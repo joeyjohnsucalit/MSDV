@@ -13,12 +13,14 @@ enum AppPage {
 }
 
 class SidebarWidget extends StatelessWidget {
+  final double width;
   final AppPage currentPage;
   final ValueChanged<AppPage> onPageChange;
   final VoidCallback onLogout;
 
   const SidebarWidget({
     super.key,
+    this.width = 270,
     required this.currentPage,
     required this.onPageChange,
     required this.onLogout,
@@ -27,7 +29,7 @@ class SidebarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 270,
+      width: width,
       decoration: BoxDecoration(
         color: AppColors.sidebarBg,
         boxShadow: [
