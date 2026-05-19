@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jassu Users</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+        .ju-wrap { display: flex; flex-direction: column; gap: 20px; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* Stat cards */
+        .ju-stat-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+        .ju-mini-card {
+            background:#fff; border:1px solid #e2e6f0; border-radius:12px;
+            padding:16px 18px; display:flex; align-items:center; gap:14px;
+            box-shadow:0 1px 4px rgba(0,0,0,0.04);
+        }
+        .ju-mini-icon {
+            width:42px; height:42px; border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:16px; flex-shrink:0;
+        }
+        .ju-mini-icon.blue  { background:rgba(59,91,219,0.10); color:#3b5bdb; }
+        .ju-mini-icon.green { background:rgba(5,150,105,0.10); color:#059669; }
+        .ju-mini-val { font-size:26px; font-weight:800; letter-spacing:-0.03em; line-height:1; }
+        .ju-mini-icon.blue  ~ .ju-mini-info .ju-mini-val { color:#3b5bdb; }
+        .ju-mini-icon.green ~ .ju-mini-info .ju-mini-val { color:#059669; }
+        .ju-mini-lbl { font-size:11px; color:#4b5568; margin-top:3px; }
+
+        /* Panel */
+        .ju-panel {
+            background:#fff; border:1px solid #e2e6f0; border-radius:14px;
+            padding:20px 22px; box-shadow:0 1px 4px rgba(0,0,0,0.04);
+        }
+        .ju-panel-header {
+            display:flex; align-items:flex-start; justify-content:space-between;
+            margin-bottom:18px; gap:12px; flex-wrap:wrap;
+        }
+        .ju-panel-title { font-size:13px; font-weight:700; color:#1a1d2e; }
+        .ju-panel-sub   { font-size:11px; color:#9099b5; margin-top:2px; }
+
+        /* Toolbar */
+        .ju-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .ju-search-wrap { position:relative; min-width:190px; }
+        .ju-search-wrap i {
+            position:absolute; left:10px; top:50%;
+            transform:translateY(-50%); color:#9099b5; font-size:12px;
+        }
+        .ju-search-wrap input {
+            width:100%; padding:7px 10px 7px 30px;
+            border:1px solid #e2e6f0; border-radius:8px;
+            background:#f7f8fc; font-family:'Plus Jakarta Sans',sans-serif;
+            font-size:12px; color:#1a1d2e; outline:none; transition:border-color 0.2s;
+        }
+        .ju-search-wrap input:focus { border-color:#3b5bdb; background:#fff; }
+        .ju-select {
+            background:#f7f8fc; border:1px solid #e2e6f0; color:#4b5568;
+            font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:500;
+            padding:7px 10px; border-radius:8px; cursor:pointer; outline:none;
+        }
+        .ju-select:focus { border-color:#3b5bdb; }
+
+        /* Buttons */
+        .ju-btn {
+            display:inline-flex; align-items:center; gap:7px; padding:7px 14px;
+            border-radius:8px; font-size:12px; font-family:'Plus Jakarta Sans',sans-serif;
+            font-weight:600; cursor:pointer; border:none; transition:all 0.2s; white-space:nowrap;
+        }
+        .ju-btn-primary { background:#3b5bdb; color:#fff; }
+        .ju-btn-primary:hover { background:#2d4bbf; }
+        .ju-btn-ghost { background:#f7f8fc; color:#4b5568; border:1px solid #e2e6f0; }
+        .ju-btn-ghost:hover { background:#eef0f6; color:#1a1d2e; }
+        .ju-btn-danger { background:rgba(220,38,38,0.09); color:#dc2626; border:1px solid rgba(220,38,38,0.2); }
+        .ju-btn-danger:hover { background:rgba(220,38,38,0.17); }
+        .ju-btn-sm   { padding:5px 10px; font-size:11px; }
+        .ju-btn-icon { width:30px; height:30px; padding:0; justify-content:center; border-radius:7px; }
+
+        /* Table */
+        .ju-table-wrap { overflow-x:auto; }
+        .ju-table { width:100%; border-collapse:collapse; font-size:12px; }
+        .ju-table thead tr th {
+            text-align:left; font-size:10px; font-weight:700;
+            letter-spacing:0.08em; text-transform:uppercase; color:#9099b5;
+            padding:8px 14px; border-bottom:1px solid #e2e6f0; white-space:nowrap;
+        }
+        .ju-table tbody tr { transition:background 0.15s; }
+        .ju-table tbody tr:hover { background:#f7f8fc; }
+        .ju-table tbody tr td {
+            padding:11px 14px; border-bottom:1px solid rgba(0,0,0,0.04);
+            color:#4b5568; vertical-align:middle;
+        }
+        .ju-table tbody tr td:first-child { color:#1a1d2e; font-weight:600; }
+        .ju-mono { font-family:'DM Mono',monospace; font-size:11px; }
+        .ju-badge {
+            display:inline-block; padding:3px 9px; border-radius:99px;
+            font-size:10px; font-weight:700; letter-spacing:0.04em;
+        }
+        .ju-badge-admin { background:rgba(59,91,219,0.09); color:#3b5bdb; border:1px solid rgba(59,91,219,0.2); }
+        .ju-badge-jassu { background:rgba(109,40,217,0.09); color:#6d28d9; border:1px solid rgba(109,40,217,0.2); }
+        .ju-avatar {
+            width:30px; height:30px; border-radius:8px;
+            display:inline-flex; align-items:center; justify-content:center;
+            font-size:11px; font-weight:700; flex-shrink:0;
+            margin-right:8px; vertical-align:middle;
+        }
+        .ju-actions { display:flex; gap:6px; align-items:center; }
+        .ju-empty { text-align:center; padding:44px 20px; color:#9099b5; }
+        .ju-empty i { font-size:34px; margin-bottom:10px; opacity:0.35; display:block; }
+        .ju-empty p { font-size:12px; }
+
+        /* Pagination */
+        .ju-pagination {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-top:16px; font-size:11px; color:#9099b5; flex-wrap:wrap; gap:10px;
+        }
+        .ju-page-btns { display:flex; gap:5px; }
+        .ju-page-btn {
+            width:28px; height:28px; border-radius:7px; background:#f7f8fc;
+            border:1px solid #e2e6f0; cursor:pointer; font-size:11px;
+            font-weight:600; color:#4b5568; display:flex; align-items:center;
+            justify-content:center; transition:all 0.15s;
+        }
+        .ju-page-btn:hover, .ju-page-btn.active { background:#3b5bdb; border-color:#3b5bdb; color:#fff; }
+        .ju-page-btn:disabled { opacity:0.35; cursor:not-allowed; pointer-events:none; }
+
+        /* Section label */
+        .ju-section-label {
+            font-size:11px; font-weight:700; letter-spacing:0.1em;
+            text-transform:uppercase; color:#9099b5; margin-bottom:-4px;
+        }
+
+        /* Modals */
+        .ju-overlay {
+            display:none; position:fixed; inset:0;
+            background:rgba(15,20,40,0.45); backdrop-filter:blur(4px);
+            z-index:9999; align-items:center; justify-content:center;
+        }
+        .ju-overlay.open { display:flex; }
+        .ju-modal {
+            background:#fff; border:1px solid #e2e6f0; border-radius:16px;
+            padding:28px; width:100%; max-width:440px;
+            box-shadow:0 20px 60px rgba(0,0,0,0.15);
+            animation:juModalIn 0.2s ease;
+        }
+        @keyframes juModalIn {
+            from { opacity:0; transform:translateY(-12px) scale(0.97); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .ju-modal-header {
+            display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;
+        }
+        .ju-modal-title { font-size:15px; font-weight:700; color:#1a1d2e; font-family:'Plus Jakarta Sans',sans-serif; }
+        .ju-modal-close {
+            width:30px; height:30px; border-radius:7px; background:#f7f8fc;
+            border:1px solid #e2e6f0; cursor:pointer; display:flex;
+            align-items:center; justify-content:center; color:#9099b5; font-size:13px; transition:all 0.15s;
+        }
+        .ju-modal-close:hover { background:#eef0f6; color:#1a1d2e; }
+        .ju-form-group { margin-bottom:15px; }
+        .ju-form-group label {
+            display:block; font-size:11px; font-weight:700; color:#4b5568;
+            margin-bottom:6px; letter-spacing:0.04em; text-transform:uppercase;
+            font-family:'Plus Jakarta Sans',sans-serif;
+        }
+        .ju-form-group input,
+        .ju-form-group select {
+            width:100%; padding:9px 12px; border:1px solid #e2e6f0; border-radius:9px;
+            background:#f7f8fc; font-family:'Plus Jakarta Sans',sans-serif;
+            font-size:13px; color:#1a1d2e; outline:none; transition:border-color 0.2s;
+        }
+        .ju-form-group input:focus,
+        .ju-form-group select:focus { border-color:#3b5bdb; background:#fff; }
+        .ju-form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .ju-pass-wrap { position:relative; }
+        .ju-pass-wrap input { padding-right:38px; }
+        .ju-pass-toggle {
+            position:absolute; right:11px; top:50%; transform:translateY(-50%);
+            cursor:pointer; color:#9099b5; font-size:13px; transition:color 0.15s;
+        }
+        .ju-pass-toggle:hover { color:#3b5bdb; }
+        .ju-strength-wrap { margin-top:6px; }
+        .ju-strength-bar  { height:4px; border-radius:99px; background:#eef0f6; overflow:hidden; }
+        .ju-strength-fill { height:100%; border-radius:99px; transition:width 0.3s,background 0.3s; }
+        .ju-strength-lbl  { font-size:10px; color:#9099b5; margin-top:4px; font-family:'Plus Jakarta Sans',sans-serif; }
+        .ju-modal-footer  { display:flex; gap:10px; justify-content:flex-end; margin-top:22px; }
+
+        /* Confirm modal */
+        .ju-confirm-icon {
+            width:52px; height:52px; border-radius:14px;
+            background:rgba(220,38,38,0.10); color:#dc2626;
+            display:flex; align-items:center; justify-content:center;
+            font-size:22px; margin:0 auto 16px;
+        }
+        .ju-confirm-text { text-align:center; font-family:'Plus Jakarta Sans',sans-serif; }
+        .ju-confirm-text h3 { font-size:15px; font-weight:700; margin-bottom:8px; }
+        .ju-confirm-text p  { font-size:12px; color:#4b5568; line-height:1.6; }
+
+        /* Toast */
+        .ju-toast-wrap {
+            position:fixed; bottom:24px; right:24px;
+            display:flex; flex-direction:column; gap:10px; z-index:9999;
+        }
+        .ju-toast {
+            padding:12px 18px; border-radius:10px; font-size:12px; font-weight:500;
+            font-family:'Plus Jakarta Sans',sans-serif; display:flex; align-items:center;
+            gap:10px; box-shadow:0 6px 24px rgba(0,0,0,0.18);
+            animation:juToastIn 0.3s ease; min-width:220px; max-width:320px; color:#fff;
+        }
+        .ju-toast.success { background:#059669; }
+        .ju-toast.error   { background:#dc2626; }
+        .ju-toast.warning { background:#d97706; }
+        @keyframes juToastIn {
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+                <li>
+                    <a href="admin_dashboard.html">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            <h3>Students</h3>
+                <li>
+                    <a href="student_records.html">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Student Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="violation_history.html">
+                        <i class="fas fa-history"></i>
+                        <span>Violation History</span>
+                    </a>
+                </li>
+            <h3>Discipline</h3>
+                <li>
+                    <a href="disciplinary_action.html">
+                        <i class="fas fa-gavel"></i>
+                        <span>Disciplinary Actions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="risk_level.html">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Risk Level Indicator</span>
+                    </a>
+                </li>
+            <h3>Backup & Reports</h3>
+                <li>
+                    <a href="data_backup.html">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        <span>Data Backup</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="import_data.html">
+                        <i class="fas fa-file-import"></i>
+                        <span>Import Data</span>
+                    </a>
+                </li>
+            <h3>System</h3>
+                <li>
+                    <a href="jassu_users.html" class="active">
+                        <i class="fas fa-user"></i>
+                        <span>Jassu User</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+        </ul>
+    </div>
+</div>
+
+<div class="main-content">
+    <nav class="navbar">
+        <h1>Jassu Users</h1>
+    </nav>
+
+    <div class="content">
+        <div class="ju-wrap">
+           
+
+            <p class="ju-section-label">Manage Accounts</p>
+
+            <!-- TABLE PANEL -->
+            <div class="ju-panel">
+                <div class="ju-panel-header">
+                    <div>
+                        <div class="ju-panel-title">Jassu User Accounts</div>
+                        <div class="ju-panel-sub">Add, edit, change passwords, or remove system users</div>
+                    </div>
+                    <div class="ju-toolbar">
+                        <div class="ju-search-wrap">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search name or username…" oninput="renderTable()">
+                        </div>
+                        <select class="ju-select" id="roleFilter" onchange="renderTable()">
+                            <option value="all">All Roles</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Jassu">Jassu</option>
+                        </select>
+                        <button class="ju-btn ju-btn-primary" onclick="openAddModal()">
+                            <i class="fas fa-plus"></i> Add User
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ju-table-wrap">
+                    <table class="ju-table">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+
+                
+            </div>
+
+        </div><!-- /ju-wrap -->
+    </div><!-- /content -->
+</div><!-- /main-content -->
+
+<!-- TOAST -->
+<div class="ju-toast-wrap" id="toastWrap"></div>
+
+<!-- ══ ADD / EDIT MODAL ══ -->
+<div class="ju-overlay" id="userModal">
+    <div class="ju-modal">
+        <div class="ju-modal-header">
+            <div class="ju-modal-title" id="modalTitle">Add User</div>
+            <div class="ju-modal-close" onclick="closeModal('userModal')"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="ju-form-row">
+            <div class="ju-form-group">
+                <label>First Name</label>
+                <input type="text" id="fieldFirst" placeholder="e.g. Juan">
+            </div>
+            <div class="ju-form-group">
+                <label>Last Name</label>
+                <input type="text" id="fieldLast" placeholder="e.g. dela Cruz">
+            </div>
+        </div>
+        <div class="ju-form-group">
+            <label>Username</label>
+            <input type="text" id="fieldUsername" placeholder="e.g. jdelacruz">
+        </div>
+        <div class="ju-form-group">
+            <label>Email Address</label>
+            <input type="email" id="fieldEmail" placeholder="e.g. jdelacruz@mcc.edu.ph">
+        </div>
+        <div class="ju-form-group">
+            <label>Role</label>
+            <select id="fieldRole">
+                <option value="Admin">Admin</option>
+                <option value="Jassu">Jassu</option>
+            </select>
+        </div>
+        <div class="ju-form-group" id="passwordSection">
+            <label>Password</label>
+            <div class="ju-pass-wrap">
+                <input type="password" id="fieldPassword" placeholder="Enter password" oninput="checkStrength(this.value)">
+                <span class="ju-pass-toggle" onclick="togglePass('fieldPassword',this)"><i class="fas fa-eye"></i></span>
+            </div>
+            <div class="ju-strength-wrap" id="strengthWrap" style="display:none">
+                <div class="ju-strength-bar"><div class="ju-strength-fill" id="strengthFill"></div></div>
+                <div class="ju-strength-lbl" id="strengthLabel"></div>
+            </div>
+        </div>
+        <div class="ju-form-group" id="confirmSection">
+            <label>Confirm Password</label>
+            <div class="ju-pass-wrap">
+                <input type="password" id="fieldConfirm" placeholder="Re-enter password">
+                <span class="ju-pass-toggle" onclick="togglePass('fieldConfirm',this)"><i class="fas fa-eye"></i></span>
+            </div>
+        </div>
+        <div class="ju-modal-footer"> 
+            <button class="ju-btn ju-btn-ghost" onclick="closeModal('userModal')">Cancel</button>
+            <button class="ju-btn ju-btn-primary" id="modalSaveBtn" onclick="saveUser()">
+                <i class="fas fa-save"></i> Save User
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ CHANGE PASSWORD MODAL ══ -->
+<div class="ju-overlay" id="changePassModal">
+    <div class="ju-modal">
+        <div class="ju-modal-header">
+            <div class="ju-modal-title">Change Password</div>
+            <div class="ju-modal-close" onclick="closeModal('changePassModal')"><i class="fas fa-times"></i></div>
+        </div>
+        <p style="font-size:12px;color:#4b5568;margin-bottom:18px;font-family:'Plus Jakarta Sans',sans-serif">
+            Updating password for <strong id="cpUsername"></strong>
+        </p>
+        <div class="ju-form-group">
+            <label>New Password</label>
+            <div class="ju-pass-wrap">
+                <input type="password" id="cpNewPass" placeholder="Enter new password" oninput="checkStrength2(this.value)">
+                <span class="ju-pass-toggle" onclick="togglePass('cpNewPass',this)"><i class="fas fa-eye"></i></span>
+            </div>
+            <div class="ju-strength-wrap" id="strengthWrap2" style="display:none">
+                <div class="ju-strength-bar"><div class="ju-strength-fill" id="strengthFill2"></div></div>
+                <div class="ju-strength-lbl" id="strengthLabel2"></div>
+            </div>
+        </div>
+        <div class="ju-form-group">
+            <label>Confirm New Password</label>
+            <div class="ju-pass-wrap">
+                <input type="password" id="cpConfirm" placeholder="Re-enter new password">
+                <span class="ju-pass-toggle" onclick="togglePass('cpConfirm',this)"><i class="fas fa-eye"></i></span>
+            </div>
+        </div>
+        <div class="ju-modal-footer">
+            <button class="ju-btn ju-btn-ghost" onclick="closeModal('changePassModal')">Cancel</button>
+            <button class="ju-btn ju-btn-primary" onclick="confirmChangePass()">
+                <i class="fas fa-key"></i> Update Password
+            </button>
+        </div>  
+    </div>
+</div>
+
+<!-- ══ DELETE CONFIRM MODAL ══ -->
+<div class="ju-overlay" id="deleteModal">
+    <div class="ju-modal" style="max-width:360px">
+        <div class="ju-confirm-icon"><i class="fas fa-trash-alt"></i></div>
+        <div class="ju-confirm-text">
+            <h3>Delete Account?</h3>
+            <p>This will permanently remove <strong id="deleteTargetName"></strong>'s account. This action cannot be undone.</p>
+        </div>
+        <div class="ju-modal-footer" style="justify-content:center;margin-top:24px">
+            <button class="ju-btn ju-btn-ghost" onclick="closeModal('deleteModal')">Cancel</button>
+            <button class="ju-btn ju-btn-danger" onclick="confirmDelete()">
+                <i class="fas fa-trash-alt"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="../Script/script.js"></script>
+<script>
+// ─── DATA ───
+let users = [
+    { id:1, first:'Admin',  last:'User',   username:'admin',   email:'admin@mcc.edu.ph',   role:'Admin' },
+    { id:2, first:'Maria',  last:'Santos', username:'msantos', email:'msantos@mcc.edu.ph', role:'Jassu' },
+    { id:3, first:'Carlos', last:'Reyes',  username:'creyes',  email:'creyes@mcc.edu.ph',  role:'Jassu' },
+    { id:4, first:'Ana',    last:'Lim',    username:'alim',    email:'alim@mcc.edu.ph',    role:'Admin' },
+];
+let nextId=5, editId=null, deleteId=null, changePassId=null;
+const PAGE_SIZE=8; let currentPage=1;
+
+const AVATAR_COLORS=[
+    ['#3b5bdb','#dbe4ff'],['#6d28d9','#ede9fe'],
+    ['#0891b2','#cffafe'],['#059669','#d1fae5'],
+    ['#d97706','#fef3c7'],['#dc2626','#fee2e2'],
+];
+function getAC(i){ return AVATAR_COLORS[i%AVATAR_COLORS.length]; }
+function initials(f,l){ return ((f[0]||'')+(l[0]||'')).toUpperCase(); }
+
+function getFiltered(){
+    const q=document.getElementById('searchInput').value.toLowerCase();
+    const role=document.getElementById('roleFilter').value;
+    return users.filter(u=>{
+        const full=(u.first+' '+u.last+' '+u.username).toLowerCase();
+        return full.includes(q)&&(role==='all'||u.role===role);
+    });
+}
+
+function renderTable(){
+    const filtered=getFiltered();
+    const total=filtered.length;
+    const pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+    if(currentPage>pages) currentPage=pages;
+    const start=(currentPage-1)*PAGE_SIZE;
+    const slice=filtered.slice(start,start+PAGE_SIZE);
+    const tbody=document.getElementById('userTableBody');
+
+    if(!slice.length){
+        tbody.innerHTML=`<tr><td colspan="5"><div class="ju-empty"><i class="fas fa-users-slash"></i><p>No users match the current filters.</p></div></td></tr>`;
+    } else {
+        tbody.innerHTML=slice.map(u=>{
+            const idx=users.indexOf(u);
+            const [fg,bg]=getAC(idx);
+            const rb=u.role==='Admin'?'ju-badge-admin':'ju-badge-jassu';
+            return `<tr>
+                <td><span class="ju-avatar" style="background:${bg};color:${fg}">${initials(u.first,u.last)}</span>${u.first} ${u.last}</td>
+                <td class="ju-mono">${u.username}</td>
+                <td style="font-size:11px;color:#9099b5">${u.email}</td>
+                <td><span class="ju-badge ${rb}">${u.role}</span></td>
+                <td><div class="ju-actions">
+                    <button class="ju-btn ju-btn-ghost ju-btn-sm ju-btn-icon" title="Edit" onclick="openEditModal(${u.id})"><i class="fas fa-pen"></i></button>
+                    <button class="ju-btn ju-btn-ghost ju-btn-sm ju-btn-icon" title="Change Password" onclick="openChangePass(${u.id})"><i class="fas fa-key"></i></button>
+                    <button class="ju-btn ju-btn-danger ju-btn-sm ju-btn-icon" title="Delete" onclick="openDeleteModal(${u.id})"><i class="fas fa-trash-alt"></i></button>
+                </div></td>
+            </tr>`;
+        }).join('');
+    }
+
+    document.getElementById('paginationInfo').textContent=
+        total===0?'No results':`Showing ${start+1}–${Math.min(start+PAGE_SIZE,total)} of ${total} users`;
+
+    const pb=document.getElementById('pageBtns'); pb.innerHTML='';
+    const prev=document.createElement('button');
+    prev.className='ju-page-btn'; prev.innerHTML='<i class="fas fa-chevron-left"></i>';
+    prev.disabled=currentPage<=1; prev.onclick=()=>{currentPage--;renderTable();};
+    pb.appendChild(prev);
+    for(let p=1;p<=pages;p++){
+        const btn=document.createElement('button');
+        btn.className='ju-page-btn'+(p===currentPage?' active':'');
+        btn.textContent=p; btn.onclick=()=>{currentPage=p;renderTable();};
+        pb.appendChild(btn);
+    }
+    const next=document.createElement('button');
+    next.className='ju-page-btn'; next.innerHTML='<i class="fas fa-chevron-right"></i>';
+    next.disabled=currentPage>=pages; next.onclick=()=>{currentPage++;renderTable();};
+    pb.appendChild(next);
+
+    document.getElementById('statTotal').textContent=users.length;
+    document.getElementById('statAdmin').textContent=users.filter(u=>u.role==='Admin').length;
+}
+
+function openAddModal(){
+    editId=null;
+    document.getElementById('modalTitle').textContent='Add New User';
+    document.getElementById('modalSaveBtn').innerHTML='<i class="fas fa-plus"></i> Add User';
+    document.getElementById('passwordSection').style.display='';
+    document.getElementById('confirmSection').style.display='';
+    clearForm();
+    document.getElementById('userModal').classList.add('open');
+}
+
+function openEditModal(id){
+    editId=id;
+    const u=users.find(x=>x.id===id);
+    document.getElementById('modalTitle').textContent='Edit User';
+    document.getElementById('modalSaveBtn').innerHTML='<i class="fas fa-save"></i> Save Changes';
+    document.getElementById('fieldFirst').value=u.first;
+    document.getElementById('fieldLast').value=u.last;
+    document.getElementById('fieldUsername').value=u.username;
+    document.getElementById('fieldEmail').value=u.email;
+    document.getElementById('fieldRole').value=u.role;
+    document.getElementById('passwordSection').style.display='none';
+    document.getElementById('confirmSection').style.display='none';
+    document.getElementById('userModal').classList.add('open');
+}
+
+function clearForm(){
+    ['fieldFirst','fieldLast','fieldUsername','fieldEmail','fieldPassword','fieldConfirm']
+        .forEach(id=>document.getElementById(id).value='');
+    document.getElementById('fieldRole').value='Jassu';
+    document.getElementById('strengthWrap').style.display='none';
+}
+
+function saveUser(){
+    const first=document.getElementById('fieldFirst').value.trim();
+    const last=document.getElementById('fieldLast').value.trim();
+    const username=document.getElementById('fieldUsername').value.trim();
+    const email=document.getElementById('fieldEmail').value.trim();
+    const role=document.getElementById('fieldRole').value;
+    if(!first||!last||!username||!email){showToast('Please fill in all required fields.','error');return;}
+    if(!email.includes('@')){showToast('Please enter a valid email address.','error');return;}
+    if(users.find(u=>u.username===username&&u.id!==editId)){showToast('Username already exists.','error');return;}
+    if(editId===null){
+        const pass=document.getElementById('fieldPassword').value;
+        const confirm=document.getElementById('fieldConfirm').value;
+        if(!pass){showToast('Password is required.','error');return;}
+        if(pass!==confirm){showToast('Passwords do not match.','error');return;}
+        if(pass.length<6){showToast('Password must be at least 6 characters.','error');return;}
+        users.push({id:nextId++,first,last,username,email,role});
+        showToast(`${first} ${last} added successfully.`,'success');
+    } else {
+        Object.assign(users.find(x=>x.id===editId),{first,last,username,email,role});
+        showToast(`${first} ${last} updated successfully.`,'success');
+    }
+    closeModal('userModal'); currentPage=1; renderTable();
+}
+
+function openChangePass(id){
+    changePassId=id;
+    const u=users.find(x=>x.id===id);
+    document.getElementById('cpUsername').textContent=`${u.first} ${u.last} (@${u.username})`;
+    document.getElementById('cpNewPass').value='';
+    document.getElementById('cpConfirm').value='';
+    document.getElementById('strengthWrap2').style.display='none';
+    document.getElementById('changePassModal').classList.add('open');
+}
+
+function confirmChangePass(){
+    const pass=document.getElementById('cpNewPass').value;
+    const confirm=document.getElementById('cpConfirm').value;
+    if(!pass){showToast('New password is required.','error');return;}
+    if(pass.length<6){showToast('Password must be at least 6 characters.','error');return;}
+    if(pass!==confirm){showToast('Passwords do not match.','error');return;}
+    const u=users.find(x=>x.id===changePassId);
+    showToast(`Password updated for ${u.first} ${u.last}.`,'success');
+    closeModal('changePassModal');
+}
+
+function openDeleteModal(id){
+    deleteId=id;
+    const u=users.find(x=>x.id===id);
+    document.getElementById('deleteTargetName').textContent=`${u.first} ${u.last}`;
+    document.getElementById('deleteModal').classList.add('open');
+}
+
+function confirmDelete(){
+    const u=users.find(x=>x.id===deleteId);
+    users=users.filter(x=>x.id!==deleteId);
+    showToast(`${u.first} ${u.last} has been deleted.`,'warning');
+    closeModal('deleteModal'); renderTable();
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.ju-overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+function togglePass(inputId,icon){
+    const inp=document.getElementById(inputId);
+    const showing=inp.type==='text';
+    inp.type=showing?'password':'text';
+    icon.innerHTML=showing?'<i class="fas fa-eye"></i>':'<i class="fas fa-eye-slash"></i>';
+}
+
+function evalStrength(p){
+    let s=0;
+    if(p.length>=8)s++; if(/[A-Z]/.test(p))s++;
+    if(/[0-9]/.test(p))s++; if(/[^A-Za-z0-9]/.test(p))s++;
+    return s;
+}
+function applyStrength(score,fillId,labelId,wrapId){
+    document.getElementById(wrapId).style.display='';
+    const map=[{pct:'25%',color:'#dc2626',text:'Weak'},{pct:'50%',color:'#d97706',text:'Fair'},{pct:'75%',color:'#3b5bdb',text:'Good'},{pct:'100%',color:'#059669',text:'Strong'}];
+    const s=map[Math.max(0,score-1)]||map[0];
+    const f=document.getElementById(fillId); f.style.width=s.pct; f.style.background=s.color;
+    const l=document.getElementById(labelId); l.textContent=s.text; l.style.color=s.color;
+}
+function checkStrength(v){if(!v){document.getElementById('strengthWrap').style.display='none';return;}applyStrength(evalStrength(v),'strengthFill','strengthLabel','strengthWrap');}
+function checkStrength2(v){if(!v){document.getElementById('strengthWrap2').style.display='none';return;}applyStrength(evalStrength(v),'strengthFill2','strengthLabel2','strengthWrap2');}
+
+function showToast(msg,type='success'){
+    const wrap=document.getElementById('toastWrap');
+    const toast=document.createElement('div');
+    const icon=type==='success'?'fa-check-circle':type==='error'?'fa-times-circle':'fa-exclamation-triangle';
+    toast.className=`ju-toast ${type}`;
+    toast.innerHTML=`<i class="fas ${icon}"></i> ${msg}`;
+    wrap.appendChild(toast);
+    setTimeout(()=>toast.remove(),3500);
+}
+
+renderTable();
+</script>
+</body>
+</html>

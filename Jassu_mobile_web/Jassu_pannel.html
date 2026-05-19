@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Jassu - Student Violation Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f1f4f9;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px 0;
+        }
+        
+        body.show-login {
+            background: linear-gradient(135deg, #030357 0%, #0d0853 100%);
+        }
+        
+        .container-fluid {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* LOGIN SECTION */
+        #loginSection {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #030357 0%, #0d0853 100%);
+            z-index: 2000;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #loginSection.active {
+            display: flex;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 28px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        
+        .login-header {
+            margin-bottom: 32px;
+        }
+        
+        .login-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #030357;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .login-header p {
+            font-size: 13px;
+            color: #9099b5;
+        }
+        
+        .login-form {
+            text-align: left;
+        }
+        
+        .login-group {
+            margin-bottom: 18px;
+        }
+        
+        .login-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .login-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .login-group input:focus {
+            outline: none;
+            border-color: #030357;
+            background-color: #f8f9ff;
+            box-shadow: 0 0 0 4px rgba(3, 3, 87, 0.1);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #030357 0%, #0d0853 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 24px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(3, 3, 87, 0.4);
+        }
+        
+        /* REPORT SECTION */
+        #reportSection {
+            display: flex;
+        }
+        
+        #reportSection.hidden {
+            display: none;
+        }
+        
+        .report-header {
+            text-align: center;
+            color: #030357;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+        
+        .report-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .report-header p {
+            font-size: 14px;
+            color: #9099b5;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .form-section {
+            margin-bottom: 24px;
+        }
+        
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #030357;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #a80606;
+            padding-left: 12px;
+        }
+        
+        .section-title i {
+            font-size: 16px;
+            color: #a80606;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            appearance: none;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #030357;
+            background-color: #f8f9ff;
+            box-shadow: 0 0 0 4px rgba(3, 3, 87, 0.1);
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23030357' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            padding-right: 38px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-item:hover {
+            background: #f0f2ff;
+            border-color: #030357;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #030357;
+            margin-right: 12px;
+        }
+        
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        
+        .checkbox-item input[type="checkbox"]:checked + label {
+            color: #a80606;
+            font-weight: 600;
+        }
+        
+        .other-input {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 14px;
+            background: #fff8f8;
+            border: 2px solid #ffdbdb;
+            border-radius: 10px;
+        }
+        
+        .other-input.show {
+            display: block;
+        }
+        
+        .other-input input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .other-input input:focus {
+            outline: none;
+            border-color: #a80606;
+            background-color: #fff;
+        }
+
+        /* ── E-SIGNATURE STYLES ── */
+        .signature-wrapper {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: #fafbff;
+        }
+
+        .signature-wrapper:focus-within,
+        .signature-wrapper.active {
+            border-color: #030357;
+            box-shadow: 0 0 0 4px rgba(3, 3, 87, 0.1);
+        }
+
+        .signature-wrapper.error {
+            border-color: #a80606;
+            box-shadow: 0 0 0 4px rgba(168, 6, 6, 0.1);
+        }
+
+        #signatureCanvas {
+            display: block;
+            width: 100%;
+            height: 160px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .signature-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #f1f4f9;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .signature-hint {
+            font-size: 11px;
+            color: #9099b5;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .signature-hint i {
+            font-size: 12px;
+        }
+
+        .btn-clear-sig {
+            padding: 5px 12px;
+            background: white;
+            color: #a80606;
+            border: 1.5px solid #a80606;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-clear-sig:hover {
+            background: #a80606;
+            color: white;
+        }
+
+        .signature-status {
+            margin-top: 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #9099b5;
+            min-height: 18px;
+        }
+
+        .signature-status.signed {
+            color: #2e7d32;
+        }
+
+        .signature-status.unsigned {
+            color: #a80606;
+        }
+        /* ── END E-SIGNATURE ── */
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #a80606 0%, #8b0505 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 24px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(168, 6, 6, 0.4);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .btn-logout {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .success-message {
+            display: none;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .error-message {
+            display: none;
+            background: #ffebee;
+            color: #c62828;
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        
+        .required { color: #a80606; }
+        
+        @media (max-width: 480px) {
+            .form-card  { padding: 20px 16px; }
+            .report-header h1 { font-size: 24px; }
+            .login-card { padding: 30px 20px; }
+            body        { padding: 15px 0; }
+            #signatureCanvas { height: 130px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- REPORT SECTION -->
+    <div id="reportSection" class="hidden">
+        <button class="btn-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+        
+        <div class="container-fluid">
+            <div class="report-header">
+                <h1><i class="fas fa-exclamation-circle"></i> Violation Report</h1>
+                <p>Submit a student violation report</p>
+            </div>
+            
+            <div class="form-card">
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i> Report submitted successfully!
+                </div>
+                <div class="error-message" id="errorMessage"></div>
+                
+                <form id="violationForm">
+                    <!-- STUDENT INFORMATION -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-user"></i> Student Information
+                        </div>
+                        <div class="form-group">
+                            <label>Student ID <span class="required">*</span></label>
+                            <input type="text" id="studentId" placeholder="e.g. 2024001" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" placeholder="e.g. Juan Dela Cruz" required>
+                        </div>
+                    </div>
+                    
+                    <!-- VIOLATION DETAILS -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-triangle-exclamation"></i> Violation Details
+                        </div>
+                        <label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.3px;">
+                            Violation Type <span class="required">*</span>
+                        </label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation1" name="violationType" value="Academic Dishonesty">
+                                <label for="violation1">Academic Dishonesty</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation2" name="violationType" value="Insubordination">
+                                <label for="violation2">Insubordination</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation3" name="violationType" value="Attendance Issue">
+                                <label for="violation3">Attendance Issue</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation4" name="violationType" value="Disruptive Behavior">
+                                <label for="violation4">Disruptive Behavior</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation5" name="violationType" value="Harassment">
+                                <label for="violation5">Harassment</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation6" name="violationType" value="Policy Violation">
+                                <label for="violation6">Policy Violation</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="violation7" name="violationType" value="Other" onchange="toggleOtherInput()">
+                                <label for="violation7">Other</label>
+                            </div>
+                            <div class="other-input" id="otherInput">
+                                <label for="otherSpecify" style="margin-bottom:6px;display:block;">Please specify:</label>
+                                <input type="text" id="otherSpecify" placeholder="Describe the other violation type...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ACADEMIC INFO -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-graduation-cap"></i> Academic Information
+                        </div>
+                        <div class="form-group">
+                            <label>Course <span class="required">*</span></label>
+                            <select id="course" required>
+                                <option value="">Select a course</option>
+                                <option value="BSIT">BSIT - Bachelor of Science in Information Technology</option>
+                                <option value="BSCS">BSCS - Bachelor of Science in Computer Science</option>
+                                <option value="BSBA">BSBA - Bachelor of Science in Business Administration</option>
+                                <option value="BSECE">BSECE - Bachelor of Science in Electronics and Communications Engineering</option>
+                                <option value="BSCE">BSCE - Bachelor of Science in Civil Engineering</option>
+                                <option value="BSN">BSN - Bachelor of Science in Nursing</option>
+                                <option value="BSED">BSED - Bachelor of Science in Education</option>
+                                <option value="BSHM">BSHM - Bachelor of Science in Hospitality Management</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Year Level <span class="required">*</span></label>
+                            <select id="yearLevel" required>
+                                <option value="">Select year level</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Department <span class="required">*</span></label>
+                            <select id="department" required>
+                                <option value="">Select department</option>
+                                <option value="School of Technology">School of Technology</option>
+                                <option value="College of Information Technology">College of Information Technology</option>
+                                <option value="College of Business and Management">College of Business and Management</option>
+                                <option value="College of Health Sciences">College of Health Sciences</option>
+                                <option value="College of Education">College of Education</option>
+                                <option value="College of Hospitality and Tourism">College of Hospitality and Tourism</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- ADDITIONAL DETAILS -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-clipboard"></i> Additional Details
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="description" placeholder="Provide details about the violation..." rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- E-SIGNATURE -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-pen-nib"></i> Student's E-Signature
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>
+                                Signature <span class="required">*</span>
+                            </label>
+                            <p style="font-size:12px;color:#9099b5;margin-bottom:10px;">
+                                By signing below, the student acknowledges and confirms the details of this violation report.
+                            </p>
+                            <div class="signature-wrapper" id="signatureWrapper">
+                                <canvas id="signatureCanvas"></canvas>
+                                <div class="signature-toolbar">
+                                    <span class="signature-hint">
+                                        <i class="fas fa-hand-pointer"></i> Draw your signature above
+                                    </span>
+                                    <button type="button" class="btn-clear-sig" onclick="clearSignature()">
+                                        <i class="fas fa-rotate-left"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="signature-status" id="signatureStatus">
+                                <i class="fas fa-circle-info"></i> Signature required to submit
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i> Submit Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.5/signature_pad.umd.min.js"></script>
+</body>
+</html>
