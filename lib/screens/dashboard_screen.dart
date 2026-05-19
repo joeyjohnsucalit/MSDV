@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../app_colors.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -19,32 +18,30 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SecurityHero(),
-            const SizedBox(height: 28),
-            const _SectionLabel('Overview'),
+            _SectionLabel('Overview'),
             const SizedBox(height: 14),
             _StatCardsGrid(width: w),
             const SizedBox(height: 32),
-            const _SectionLabel('Violation Trends'),
+            _SectionLabel('Violation Trends'),
             const SizedBox(height: 14),
             w < 820
                 ? Column(
-                    children: const [
+                    children: [
                       _MonthlyViolationsPanel(),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       _MinorMajorPanel(),
                     ],
                   )
                 : Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Expanded(flex: 10, child: _MonthlyViolationsPanel()),
-                      SizedBox(width: 14),
+                      const SizedBox(width: 14),
                       Expanded(flex: 14, child: _MinorMajorPanel()),
                     ],
                   ),
             const SizedBox(height: 16),
-            const _DeptBarChart(),
+            _DeptBarChart(),
             const SizedBox(height: 24),
           ],
         ),
@@ -53,120 +50,7 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _SecurityHero extends StatelessWidget {
-  const _SecurityHero();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(26),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0D193F), Color(0xFF08142C)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.18),
-            blurRadius: 30,
-            offset: const Offset(0, 22),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Icon(Icons.shield, color: AppColors.accent, size: 32),
-              SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  'Security Operations Center',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Real-time incident visibility and campus compliance monitoring for safer student operations.',
-            style: TextStyle(
-              color: AppColors.muted,
-              fontSize: 14,
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: 22),
-          Wrap(
-            spacing: 16,
-            runSpacing: 12,
-            children: const [
-              _HeroBadge(label: 'Threat Level', value: 'Moderate', color: AppColors.accent),
-              _HeroBadge(label: 'Alerts', value: '12 active', color: Color(0xFFF59E0B)),
-              _HeroBadge(label: 'Verified Cases', value: '87%', color: AppColors.success),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeroBadge extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-
-  const _HeroBadge({
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 11)),
-              Text(value,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+// ── Section Label ─────────────────────────────────────────────────────────────
 
 class _SectionLabel extends StatelessWidget {
   final String text;
@@ -180,11 +64,13 @@ class _SectionLabel extends StatelessWidget {
         fontSize: 11,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.2,
-        color: AppColors.muted,
+        color: Color(0xFF94a3b8),
       ),
     );
   }
 }
+
+// ── Stat Cards ────────────────────────────────────────────────────────────────
 
 class _StatCardsGrid extends StatelessWidget {
   final double width;
@@ -192,13 +78,13 @@ class _StatCardsGrid extends StatelessWidget {
 
   static const _cards = [
     _StatData(Icons.school_outlined, '1,248', 'Total Students',
-        Color(0xFF42A5F5), Color(0xFF112A5C)),
-    _StatData(Icons.warning_amber_rounded, '376', 'Violations',
-        Color(0xFFEF4444), Color(0xFF3F1B24)),
-    _StatData(Icons.security, '54', 'Open Incidents',
-        Color(0xFF4FD1C5), Color(0xFF0A2B2F)),
-    _StatData(Icons.check_circle_outline, '298', 'Resolved Cases',
-        Color(0xFF22C55E), Color(0xFF1C3A2D)),
+        Color(0xFF3b82f6), Color(0xFFdbeafe)),
+    _StatData(Icons.warning_amber_rounded, '376', 'Total Violations',
+        Color(0xFFef4444), Color(0xFFfee2e2)),
+    _StatData(Icons.access_time_rounded, '54', 'Pending Actions',
+        Color(0xFFf59e0b), Color(0xFFfef3c7)),
+    _StatData(Icons.check_circle_outline, '298', 'Completed Cases',
+        Color(0xFF22c55e), Color(0xFFdcfce7)),
   ];
 
   @override
@@ -208,9 +94,9 @@ class _StatCardsGrid extends StatelessWidget {
         crossAxisCount: 2,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 14,
-        crossAxisSpacing: 14,
-        childAspectRatio: 1.4,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 1.55,
         children: _cards.map((d) => _StatCard(d)).toList(),
       );
     }
@@ -239,88 +125,85 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.border),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFe2e8f0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.18),
-            blurRadius: 28,
-            offset: const Offset(0, 14),
-          ),
+              color: Colors.black.withAlpha(12),
+              blurRadius: 6,
+              offset: const Offset(0, 2))
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 38,
+            height: 38,
             decoration: BoxDecoration(
-              color: d.bg,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(d.icon, color: d.color, size: 22),
+                color: d.bg, borderRadius: BorderRadius.circular(10)),
+            child: Icon(d.icon, color: d.color, size: 19),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
           Text(d.value,
               style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: d.color,
-                height: 1,
-              )),
-          const SizedBox(height: 6),
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  color: d.color,
+                  height: 1)),
+          const SizedBox(height: 4),
           Text(d.label,
               style: const TextStyle(
-                  fontSize: 12.5,
-                  color: AppColors.muted,
-                  height: 1.4)),
+                  fontSize: 11.5, color: Color(0xFF64748b))),
         ],
       ),
     );
   }
 }
 
+// ── Chart Panel Shell ─────────────────────────────────────────────────────────
+
 class _ChartPanel extends StatelessWidget {
   final String title, subtitle;
   final Widget child;
-  const _ChartPanel({
-    required this.title,
-    required this.subtitle,
-    required this.child,
-  });
+  const _ChartPanel(
+      {required this.title,
+      required this.subtitle,
+      required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.border),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFe2e8f0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
+              color: Colors.black.withAlpha(9),
+              blurRadius: 6,
+              offset: const Offset(0, 2))
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(title,
               style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-          const SizedBox(height: 6),
+                  color: Color(0xFF1a1d2e))),
+          const SizedBox(height: 2),
           Text(subtitle,
-              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-          const SizedBox(height: 20),
+              style: const TextStyle(
+                  fontSize: 11, color: Color(0xFF94a3b8))),
+          const SizedBox(height: 18),
           child,
         ],
       ),
@@ -328,9 +211,9 @@ class _ChartPanel extends StatelessWidget {
   }
 }
 
-class _MonthlyViolationsPanel extends StatelessWidget {
-  const _MonthlyViolationsPanel();
+// ── Monthly Violations Bar Chart ──────────────────────────────────────────────
 
+class _MonthlyViolationsPanel extends StatelessWidget {
   static const _data = [12, 19, 8, 24, 15, 31, 27, 18, 22, 14, 9, 16];
   static const _months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -339,18 +222,20 @@ class _MonthlyViolationsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _ChartPanel(
+    return _ChartPanel(
       title: 'Monthly Violations',
       subtitle: 'Recorded violation events per month',
-      child: const _BarChart(
+      child: _BarChart(
         data: _data,
         labels: _months,
-        barColor: Color(0xFF4FD1C5),
-        chartHeight: 150,
+        barColor: const Color(0xFF3b5bdb),
+        chartHeight: 140,
       ),
     );
   }
 }
+
+// ── Reusable Bar Chart with Grid Lines ────────────────────────────────────────
 
 class _BarChart extends StatelessWidget {
   final List<int> data;
@@ -374,6 +259,7 @@ class _BarChart extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Y-axis labels
         SizedBox(
           width: 28,
           height: chartHeight + 18,
@@ -383,20 +269,23 @@ class _BarChart extends StatelessWidget {
               final val = (ceil * (gridLines - i) / gridLines).round();
               return Text('$val',
                   style: const TextStyle(
-                      fontSize: 9, color: AppColors.muted));
+                      fontSize: 8.5, color: Color(0xFF94a3b8)));
             }),
           ),
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: 4),
+        // Chart area
         Expanded(
           child: SizedBox(
             height: chartHeight + 18,
             child: Column(
               children: [
+                // Bars + grid
                 SizedBox(
                   height: chartHeight,
                   child: Stack(
                     children: [
+                      // Grid lines
                       Column(
                         children: List.generate(gridLines + 1, (i) {
                           return Expanded(
@@ -405,8 +294,8 @@ class _BarChart extends StatelessWidget {
                                 border: Border(
                                   top: BorderSide(
                                     color: i == gridLines
-                                        ? AppColors.border
-                                        : const Color(0xFF102847),
+                                        ? const Color(0xFFcbd5e1)
+                                        : const Color(0xFFf1f5f9),
                                     width: 1,
                                   ),
                                 ),
@@ -415,6 +304,7 @@ class _BarChart extends StatelessWidget {
                           );
                         }),
                       ),
+                      // Bars
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: List.generate(data.length, (i) {
@@ -422,7 +312,7 @@ class _BarChart extends StatelessWidget {
                           return Expanded(
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
+                                  const EdgeInsets.symmetric(horizontal: 2),
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
@@ -430,7 +320,7 @@ class _BarChart extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     color: barColor,
                                     borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(6)),
+                                        top: Radius.circular(3)),
                                   ),
                                 ),
                               ),
@@ -441,7 +331,8 @@ class _BarChart extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
+                // X-axis labels
+                const SizedBox(height: 4),
                 Row(
                   children: List.generate(data.length, (i) {
                     return Expanded(
@@ -449,7 +340,7 @@ class _BarChart extends StatelessWidget {
                         labels[i].substring(0, 1),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 10, color: AppColors.muted),
+                            fontSize: 9, color: Color(0xFF94a3b8)),
                       ),
                     );
                   }),
@@ -463,29 +354,28 @@ class _BarChart extends StatelessWidget {
   }
 }
 
+// ── Minor vs Major Donut Chart ────────────────────────────────────────────────
+
 class _MinorMajorPanel extends StatelessWidget {
-  const _MinorMajorPanel();
 
   @override
   Widget build(BuildContext context) {
-    return const _ChartPanel(
+    return _ChartPanel(
       title: 'Minor vs Major',
       subtitle: 'Offense type breakdown — all recorded violations',
-      child: const _DonutContent(),
+      child: _DonutContent(),
     );
   }
 }
 
 class _DonutContent extends StatelessWidget {
-  const _DonutContent();
-
   @override
   Widget build(BuildContext context) {
     const minorCount = 247;
     const majorCount = 129;
     const total = minorCount + majorCount;
     const minorFrac = minorCount / total;
-    const chartSize = 140.0;
+    const chartSize = 130.0;
 
     return Row(
       children: [
@@ -503,37 +393,37 @@ class _DonutContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '376',
+                    '$total',
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white),
+                        color: Color(0xFF1e293b)),
                   ),
                   Text(
                     'Total',
                     style: TextStyle(
-                        fontSize: 10, color: AppColors.muted),
+                        fontSize: 10, color: Color(0xFF94a3b8)),
                   ),
                 ],
               ),
             ],
           ),
         ),
-        const SizedBox(width: 22),
-        Expanded(
+        const SizedBox(width: 20),
+        const Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               _DonutLegendRow(
-                color: Color(0xFF4FD1C5),
+                color: Color(0xFF2563eb),
                 label: 'Minor Offenses',
                 count: minorCount,
                 fraction: minorFrac,
               ),
-              SizedBox(height: 18),
+              SizedBox(height: 16),
               _DonutLegendRow(
-                color: Color(0xFFEF4444),
+                color: Color(0xFFdc2626),
                 label: 'Major Offenses',
                 count: majorCount,
                 fraction: 1 - minorFrac,
@@ -567,14 +457,14 @@ class _DonutLegendRow extends StatelessWidget {
         Row(
           children: [
             Container(
-                width: 10,
-                height: 10,
+                width: 8,
+                height: 8,
                 decoration:
                     BoxDecoration(color: color, shape: BoxShape.circle)),
-            const SizedBox(width: 10),
+            const SizedBox(width: 6),
             Text(label,
                 style: const TextStyle(
-                    fontSize: 13, color: Colors.white70)),
+                    fontSize: 12, color: Color(0xFF374151))),
             const Spacer(),
             Text('$count',
                 style: TextStyle(
@@ -583,28 +473,29 @@ class _DonutLegendRow extends StatelessWidget {
                     color: color)),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 6),
         LayoutBuilder(builder: (context, c) {
           return Stack(
             children: [
               Container(
-                  height: 8,
+                  height: 7,
                   width: c.maxWidth,
                   decoration: BoxDecoration(
-                      color: const Color(0xFF0A203B),
-                      borderRadius: BorderRadius.circular(6))),
+                      color: const Color(0xFFf1f5f9),
+                      borderRadius: BorderRadius.circular(4))),
               Container(
-                  height: 8,
+                  height: 7,
                   width: c.maxWidth * fraction,
                   decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(6))),
+                      borderRadius: BorderRadius.circular(4))),
             ],
           );
         }),
-        const SizedBox(height: 6),
+        const SizedBox(height: 3),
         Text('${(fraction * 100).toStringAsFixed(1)}%',
-            style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+            style: const TextStyle(
+                fontSize: 10, color: Color(0xFF94a3b8))),
       ],
     );
   }
@@ -623,32 +514,33 @@ class _DonutPainter extends CustomPainter {
     final rect = Rect.fromCircle(center: center, radius: radius);
 
     final minorPaint = Paint()
-      ..color = const Color(0xFF4FD1C5)
+      ..color = const Color(0xFF2563eb)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeW
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.butt;
 
     final majorPaint = Paint()
-      ..color = const Color(0xFFEF4444)
+      ..color = const Color(0xFFdc2626)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeW
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.butt;
 
     const start = -math.pi / 2;
     final minorSweep = minorFrac * 2 * math.pi - gap;
     final majorSweep = (1 - minorFrac) * 2 * math.pi - gap;
 
     canvas.drawArc(rect, start, minorSweep, false, minorPaint);
-    canvas.drawArc(rect, start + minorSweep + gap, majorSweep, false, majorPaint);
+    canvas.drawArc(
+        rect, start + minorSweep + gap, majorSweep, false, majorPaint);
   }
 
   @override
   bool shouldRepaint(_DonutPainter old) => old.minorFrac != minorFrac;
 }
 
-class _DeptBarChart extends StatelessWidget {
-  const _DeptBarChart();
+// ── Department Stacked Bar Chart ──────────────────────────────────────────────
 
+class _DeptBarChart extends StatelessWidget {
   static const _sot = [8, 14, 6, 19, 11, 25, 20, 13, 17, 10, 7, 12];
   static const _sob = [5, 9, 4, 12, 8, 16, 14, 9, 11, 7, 4, 8];
   static const _soe = [3, 6, 2, 8, 5, 11, 9, 6, 8, 4, 2, 5];
@@ -659,15 +551,30 @@ class _DeptBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _ChartPanel(
+    return _ChartPanel(
       title: 'Monthly by Department',
       subtitle: 'SOT · SOB · SOE violation breakdown per month',
-      child: const _StackedBarChart(
-        sot: _sot,
-        sob: _sob,
-        soe: _soe,
-        labels: _months,
-        chartHeight: 160,
+      child: Column(
+        children: [
+          _StackedBarChart(
+            sot: _sot,
+            sob: _sob,
+            soe: _soe,
+            labels: _months,
+            chartHeight: 140,
+          ),
+          const SizedBox(height: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              _ChartLegend(color: Color(0xFF3b5bdb), label: 'SOT'),
+              SizedBox(width: 20),
+              _ChartLegend(color: Color(0xFF10b981), label: 'SOB'),
+              SizedBox(width: 20),
+              _ChartLegend(color: Color(0xFFf59e0b), label: 'SOE'),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -697,19 +604,22 @@ class _StackedBarChart extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Y-axis
         SizedBox(
           width: 28,
           height: chartHeight + 18,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(gridLines + 1, (i) {
-              final val = (ceil * (gridLines - i) / gridLines).round();
+              final val =
+                  (ceil * (gridLines - i) / gridLines).round();
               return Text('$val',
-                  style: const TextStyle(fontSize: 9, color: AppColors.muted));
+                  style: const TextStyle(
+                      fontSize: 8.5, color: Color(0xFF94a3b8)));
             }),
           ),
         ),
-        const SizedBox(width: 6),
+        const SizedBox(width: 4),
         Expanded(
           child: SizedBox(
             height: chartHeight + 18,
@@ -719,6 +629,7 @@ class _StackedBarChart extends StatelessWidget {
                   height: chartHeight,
                   child: Stack(
                     children: [
+                      // Grid lines
                       Column(
                         children: List.generate(gridLines + 1, (i) {
                           return Expanded(
@@ -727,9 +638,8 @@ class _StackedBarChart extends StatelessWidget {
                                 border: Border(
                                   top: BorderSide(
                                     color: i == gridLines
-                                        ? AppColors.border
-                                        : const Color(0xFF102847),
-                                    width: 1,
+                                        ? const Color(0xFFcbd5e1)
+                                        : const Color(0xFFf1f5f9),
                                   ),
                                 ),
                               ),
@@ -737,10 +647,12 @@ class _StackedBarChart extends StatelessWidget {
                           );
                         }),
                       ),
+                      // Stacked bars
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: List.generate(sot.length, (i) {
-                          final total = sot[i] + sob[i] + soe[i];
+                          final total =
+                              sot[i] + sob[i] + soe[i];
                           final totalFrac = total / ceil;
                           final sotFrac = sot[i] / total;
                           final sobFrac = sob[i] / total;
@@ -748,7 +660,8 @@ class _StackedBarChart extends StatelessWidget {
                           final barH = chartHeight * totalFrac;
                           return Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 3),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 2),
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: SizedBox(
@@ -758,16 +671,23 @@ class _StackedBarChart extends StatelessWidget {
                                     children: [
                                       Container(
                                           height: barH * sotFrac,
-                                          decoration: const BoxDecoration(
-                                              color: Color(0xFF4FD1C5),
-                                              borderRadius: BorderRadius.vertical(
-                                                  top: Radius.circular(3)))),
+                                          decoration: BoxDecoration(
+                                              color: const Color(
+                                                  0xFF3b5bdb),
+                                              borderRadius:
+                                                  const BorderRadius
+                                                      .vertical(
+                                                      top: Radius
+                                                          .circular(
+                                                              2)))),
                                       Container(
                                           height: barH * sobFrac,
-                                          color: const Color(0xFF22C55E)),
+                                          color: const Color(
+                                              0xFF10b981)),
                                       Container(
                                           height: barH * soeFrac,
-                                          color: const Color(0xFFF59E0B)),
+                                          color: const Color(
+                                              0xFFf59e0b)),
                                     ],
                                   ),
                                 ),
@@ -779,7 +699,7 @@ class _StackedBarChart extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 4),
                 Row(
                   children: List.generate(labels.length, (i) {
                     return Expanded(
@@ -787,7 +707,8 @@ class _StackedBarChart extends StatelessWidget {
                         labels[i].substring(0, 1),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 10, color: AppColors.muted),
+                            fontSize: 9,
+                            color: Color(0xFF94a3b8)),
                       ),
                     );
                   }),
@@ -801,5 +722,26 @@ class _StackedBarChart extends StatelessWidget {
   }
 }
 
-// Removed unused _ChartLegend; consolidated legend UI is handled inline.
+class _ChartLegend extends StatelessWidget {
+  final Color color;
+  final String label;
+  const _ChartLegend({required this.color, required this.label});
 
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+                color: color, borderRadius: BorderRadius.circular(2))),
+        const SizedBox(width: 6),
+        Text(label,
+            style: const TextStyle(
+                fontSize: 11, color: Color(0xFF6b7280))),
+      ],
+    );
+  }
+}

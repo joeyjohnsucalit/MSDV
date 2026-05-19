@@ -24,26 +24,26 @@ class _MainShellState extends State<MainShell> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String get _pageTitle => switch (_currentPage) {
-    AppPage.dashboard => 'Security Dashboard',
-    AppPage.studentRecords => 'Student Records',
-    AppPage.violationHistory => 'Violation History',
-    AppPage.disciplinaryAction => 'Disciplinary Actions',
-    AppPage.riskLevel => 'Risk Level Indicator',
-    AppPage.dataBackup => 'Data Backup',
-    AppPage.importData => 'Import Data',
-    AppPage.jassuUsers => 'Jassu Users',
-  };
+        AppPage.dashboard => 'Dashboard',
+        AppPage.studentRecords => 'Student Records',
+        AppPage.violationHistory => 'Violation History',
+        AppPage.disciplinaryAction => 'Disciplinary Actions',
+        AppPage.riskLevel => 'Risk Level Indicator',
+        AppPage.dataBackup => 'Data Backup',
+        AppPage.importData => 'Import Data',
+        AppPage.jassuUsers => 'Jassu Users',
+      };
 
   Widget get _pageContent => switch (_currentPage) {
-    AppPage.dashboard => const DashboardScreen(),
-    AppPage.studentRecords => const StudentRecordsScreen(),
-    AppPage.violationHistory => const ViolationHistoryScreen(),
-    AppPage.disciplinaryAction => const DisciplinaryActionScreen(),
-    AppPage.riskLevel => const RiskLevelScreen(),
-    AppPage.dataBackup => const DataBackupScreen(),
-    AppPage.importData => const ImportDataScreen(),
-    AppPage.jassuUsers => const JassuUsersScreen(),
-  };
+        AppPage.dashboard => const DashboardScreen(),
+        AppPage.studentRecords => const StudentRecordsScreen(),
+        AppPage.violationHistory => const ViolationHistoryScreen(),
+        AppPage.disciplinaryAction => const DisciplinaryActionScreen(),
+        AppPage.riskLevel => const RiskLevelScreen(),
+        AppPage.dataBackup => const DataBackupScreen(),
+        AppPage.importData => const ImportDataScreen(),
+        AppPage.jassuUsers => const JassuUsersScreen(),
+      };
 
   void _navigate(AppPage page) {
     setState(() => _currentPage = page);
@@ -69,8 +69,9 @@ class _MainShellState extends State<MainShell> {
         key: _scaffoldKey,
         backgroundColor: AppColors.background,
         drawer: Drawer(
-          width: 280,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          width: 270,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero),
           child: sidebar,
         ),
         body: Column(
@@ -78,7 +79,8 @@ class _MainShellState extends State<MainShell> {
             _TopNavbar(
               title: _pageTitle,
               showMenu: true,
-              onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
+              onMenuTap: () =>
+                  _scaffoldKey.currentState?.openDrawer(),
             ),
             Expanded(child: _pageContent),
           ],
@@ -119,17 +121,17 @@ class _TopNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.navbarBg, AppColors.surface],
+        color: AppColors.navbarBg,
+        border: Border(
+          bottom: BorderSide(color: AppColors.redAccent, width: 5),
         ),
-        border: Border(bottom: BorderSide(color: AppColors.accent, width: 2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black26,
-            blurRadius: 18,
-            offset: Offset(0, 4),
+            color: Color(0x80000000),
+            blurRadius: 10,
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -138,32 +140,17 @@ class _TopNavbar extends StatelessWidget {
           if (showMenu) ...[
             GestureDetector(
               onTap: onMenuTap,
-              child: const Icon(Icons.menu, color: Colors.white, size: 24),
+              child: const Icon(Icons.menu,
+                  color: Colors.white, size: 24),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 14),
           ],
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: const [
-                Icon(Icons.lock_outline, size: 18, color: AppColors.accent),
-                SizedBox(width: 8),
-                Text('Protected', style: TextStyle(color: Colors.white70)),
-              ],
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],

@@ -27,29 +27,28 @@ class SidebarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280,
-      decoration: const BoxDecoration(
+      width: 270,
+      decoration: BoxDecoration(
         color: AppColors.sidebarBg,
         boxShadow: [
           BoxShadow(
-            color: Colors.black26,
-            blurRadius: 24,
-            offset: Offset(0, 10),
+            color: Colors.black.withAlpha(128),
+            blurRadius: 5,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         children: [
-          const _SidebarHeader(),
+          _SidebarHeader(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
                   _SectionLabel('Overview'),
                   _SidebarItem(
-                    icon: Icons.dashboard_outlined,
+                    icon: Icons.show_chart,
                     label: 'Dashboard',
                     page: AppPage.dashboard,
                     currentPage: currentPage,
@@ -57,14 +56,14 @@ class SidebarWidget extends StatelessWidget {
                   ),
                   _SectionLabel('Students'),
                   _SidebarItem(
-                    icon: Icons.school_outlined,
+                    icon: Icons.school,
                     label: 'Student Records',
                     page: AppPage.studentRecords,
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.studentRecords),
                   ),
                   _SidebarItem(
-                    icon: Icons.history_edu,
+                    icon: Icons.history,
                     label: 'Violation History',
                     page: AppPage.violationHistory,
                     currentPage: currentPage,
@@ -72,14 +71,14 @@ class SidebarWidget extends StatelessWidget {
                   ),
                   _SectionLabel('Discipline'),
                   _SidebarItem(
-                    icon: Icons.gavel_outlined,
+                    icon: Icons.gavel,
                     label: 'Disciplinary Actions',
                     page: AppPage.disciplinaryAction,
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.disciplinaryAction),
                   ),
                   _SidebarItem(
-                    icon: Icons.shield_rounded,
+                    icon: Icons.warning_amber_rounded,
                     label: 'Risk Level Indicator',
                     page: AppPage.riskLevel,
                     currentPage: currentPage,
@@ -87,14 +86,14 @@ class SidebarWidget extends StatelessWidget {
                   ),
                   _SectionLabel('Backup & Reports'),
                   _SidebarItem(
-                    icon: Icons.backup_outlined,
+                    icon: Icons.cloud_download,
                     label: 'Data Backup',
                     page: AppPage.dataBackup,
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.dataBackup),
                   ),
                   _SidebarItem(
-                    icon: Icons.upload_file_outlined,
+                    icon: Icons.upload_file,
                     label: 'Import Data',
                     page: AppPage.importData,
                     currentPage: currentPage,
@@ -102,15 +101,14 @@ class SidebarWidget extends StatelessWidget {
                   ),
                   _SectionLabel('System'),
                   _SidebarItem(
-                    icon: Icons.person_outline,
-                    label: 'Jassu Users',
+                    icon: Icons.person,
+                    label: 'Jassu User',
                     page: AppPage.jassuUsers,
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.jassuUsers),
                   ),
-                  const SizedBox(height: 20),
                   _LogoutItem(onTap: onLogout),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -122,32 +120,36 @@ class SidebarWidget extends StatelessWidget {
 }
 
 class _SidebarHeader extends StatelessWidget {
-  const _SidebarHeader();
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
         color: AppColors.sidebarHeaderBg,
-        border: Border(bottom: BorderSide(color: AppColors.accent, width: 3)),
+        border: Border(
+          bottom: BorderSide(color: AppColors.redAccent, width: 5),
+        ),
       ),
       child: Row(
         children: [
           Container(
-            width: 58,
-            height: 58,
-            margin: const EdgeInsets.only(right: 12),
+            width: 60,
+            height: 60,
+            margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.accent, width: 1.5),
+              border: Border.all(color: Colors.white, width: 1),
+              color: Colors.white,
             ),
             child: ClipOval(
               child: Image.asset(
                 'images/mccLogo.png',
                 fit: BoxFit.cover,
-                errorBuilder: (ctx, err, st) =>
-                    const Icon(Icons.shield, size: 32, color: AppColors.accent),
+                errorBuilder: (ctx, err, st) => const Icon(
+                  Icons.school,
+                  size: 32,
+                  color: Color(0xFF030357),
+                ),
               ),
             ),
           ),
@@ -156,17 +158,16 @@ class _SidebarHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  'Security HQ',
+                  'Admin Panel',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 4),
                 Text(
-                  'MCC Violation Control',
-                  style: TextStyle(color: AppColors.muted, fontSize: 11),
+                  'MCC Student Violation System',
+                  style: TextStyle(color: Color(0xFF959799), fontSize: 11),
                 ),
               ],
             ),
@@ -184,14 +185,14 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
       child: Text(
         label.toUpperCase(),
         style: const TextStyle(
           fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: AppColors.muted,
-          letterSpacing: 1.2,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF796d00),
+          letterSpacing: 0.5,
         ),
       ),
     );
@@ -218,44 +219,26 @@ class _SidebarItem extends StatelessWidget {
     final isActive = page == currentPage;
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.surface : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
+          color: isActive ? const Color(0x22383838) : Colors.transparent,
+          borderRadius: BorderRadius.circular(4),
           border: isActive
-              ? Border.all(color: AppColors.accent.withOpacity(0.6), width: 1)
-              : Border.all(color: Colors.transparent),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: AppColors.accent.withOpacity(0.12),
-                    blurRadius: 14,
-                    offset: const Offset(0, 8),
-                  ),
-                ]
+              ? const Border(
+                  left: BorderSide(color: Color(0xFFbd0505), width: 4),
+                )
               : null,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: EdgeInsets.fromLTRB(isActive ? 12 : 16, 13, 16, 13),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 20,
-                color: isActive ? AppColors.accent : AppColors.muted,
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isActive ? Colors.white : AppColors.muted,
-                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                  ),
-                ),
+              Icon(icon, size: 17, color: Colors.black87),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),
@@ -274,22 +257,16 @@ class _LogoutItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Row(
-          children: const [
-            Icon(Icons.logout, size: 18, color: AppColors.redAccent),
-            SizedBox(width: 10),
-            Text(
-              'Log Out',
-              style: TextStyle(fontSize: 14, color: AppColors.redAccent),
-            ),
-          ],
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+          child: Row(
+            children: const [
+              Icon(Icons.logout, size: 17, color: Colors.black87),
+              SizedBox(width: 8),
+              Text('Log Out', style: TextStyle(fontSize: 14, color: Colors.black87)),
+            ],
+          ),
         ),
       ),
     );
