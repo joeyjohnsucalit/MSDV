@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/jassu_shell.dart';
 import 'screens/login_screen.dart';
 import 'screens/main_shell.dart';
 
@@ -23,6 +24,7 @@ class MsdvApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginScreen(),
         '/main': (context) => const MainShell(),
+        '/jassu': (context) => const JassuShell(),
       },
     );
   }

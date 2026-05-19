@@ -12,7 +12,29 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordCtrl = TextEditingController();
 
   void _login() {
-    Navigator.pushReplacementNamed(context, '/main');
+    final username = _usernameCtrl.text.trim();
+    final password = _passwordCtrl.text;
+
+    if (username == 'admin' && password == 'admin123') {
+      Navigator.pushReplacementNamed(context, '/main');
+      return;
+    }
+
+    if (username == 'jassu' && password == 'jassu123') {
+      Navigator.pushReplacementNamed(context, '/jassu');
+      return;
+    }
+
+    _showError('Invalid credentials. Use admin/admin123 or jassu/jassu123.');
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: const Color(0xFFb40404),
+      ),
+    );
   }
 
   @override
@@ -123,6 +145,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Temporary accounts: admin/admin123 or jassu/jassu123',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
