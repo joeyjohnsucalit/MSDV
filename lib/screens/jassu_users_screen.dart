@@ -288,48 +288,79 @@ class _JassuUsersScreenState extends State<JassuUsersScreen> {
             child: Column(
               children: [
                 // Panel header
-                Row(
-                  children: [
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Jassu User Accounts',
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF1a1d2e))),
-                          SizedBox(height: 2),
-                          Text(
-                              'Add, edit, change passwords, or remove system users',
-                              style: TextStyle(
-                                  fontSize: 11, color: Color(0xFF9099b5))),
-                        ],
+                LayoutBuilder(builder: (context, headerConstraints) {
+                  final isNarrowHeader = headerConstraints.maxWidth < 760;
+                  final headerText = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text('Jassu User Accounts',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF1a1d2e))),
+                      SizedBox(height: 2),
+                      Text(
+                          'Add, edit, change passwords, or remove system users',
+                          style: TextStyle(
+                              fontSize: 11, color: Color(0xFF9099b5))),
+                    ],
+                  );
+
+                  final actionWidgets = [
+                    SizedBox(
+                      width: isNarrowHeader ? double.infinity : 190,
+                      child: _SearchField(
+                          onChanged: (v) => setState(() => _search = v)),
+                    ),
+                    const SizedBox(width: 8, height: 8),
+                    SizedBox(
+                      width: isNarrowHeader ? double.infinity : 160,
+                      child: _RoleFilterDropdown(
+                          onChanged: (v) => setState(() => _roleFilter = v)),
+                    ),
+                    const SizedBox(width: 8, height: 8),
+                    SizedBox(
+                      width: isNarrowHeader ? double.infinity : null,
+                      child: ElevatedButton.icon(
+                        onPressed: () => _showUserDialog(),
+                        icon: const Icon(Icons.add, size: 14),
+                        label: const Text('Add User',
+                            style: TextStyle(fontSize: 12)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF3b5bdb),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
                       ),
                     ),
-                    _SearchField(
-                        onChanged: (v) => setState(() => _search = v)),
-                    const SizedBox(width: 8),
-                    _RoleFilterDropdown(
-                        onChanged: (v) =>
-                            setState(() => _roleFilter = v)),
-                    const SizedBox(width: 8),
-                    ElevatedButton.icon(
-                      onPressed: () => _showUserDialog(),
-                      icon: const Icon(Icons.add, size: 14),
-                      label: const Text('Add User',
-                          style: TextStyle(fontSize: 12)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3b5bdb),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                    ),
-                  ],
-                ),
+                  ];
+
+                  return isNarrowHeader
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            headerText,
+                            const SizedBox(height: 16),
+                            ...actionWidgets,
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(child: headerText),
+                            const SizedBox(width: 16),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: actionWidgets,
+                            ),
+                          ],
+                        );
+                }),
                 const SizedBox(height: 16),
                 // Table
                 SingleChildScrollView(
@@ -470,12 +501,13 @@ class _JassuUsersScreenState extends State<JassuUsersScreen> {
 
 class _SearchField extends StatelessWidget {
   final ValueChanged<String> onChanged;
-  const _SearchField({required this.onChanged});
+  final double? width;
+  const _SearchField({required this.onChanged, this.width});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 190,
+      width: width ?? 190,
       height: 34,
       child: TextField(
         onChanged: onChanged,
