@@ -84,7 +84,7 @@ class _JassuDashboardScreenState extends State<JassuDashboardScreen> {
               border: Border.all(color: AppColors.border),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -165,7 +165,7 @@ class _JassuDashboardScreenState extends State<JassuDashboardScreen> {
                     )),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _violationType,
+                  initialValue: _violationType,
                   onChanged: (value) {
                     setState(() => _violationType = value ?? 'Minor');
                   },
@@ -400,8 +400,8 @@ class _SubmissionCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: entry.type == 'Major'
-                      ? const Color(0xFFEF4444).withOpacity(0.1)
-                      : const Color(0xFFF59E0B).withOpacity(0.1),
+                      ? Color(0xFFEF4444).withValues(alpha: 0.1)
+                      : Color(0xFFF59E0B).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -428,94 +428,3 @@ class _SubmissionCard extends StatelessWidget {
   }
 }
 
-class _MetricCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final String subtitle;
-  final Color color;
-
-  const _MetricCard({
-    required this.title,
-    required this.value,
-    required this.subtitle,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 320,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(22),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.muted)),
-          const SizedBox(height: 10),
-          Text(value,
-              style: TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.w800,
-                  color: color)),
-          const SizedBox(height: 10),
-          Text(subtitle,
-              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActivityTile extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-
-  const _ActivityTile({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: ListTile(
-        leading: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Icon(icon, color: AppColors.primary),
-        ),
-        title: Text(title,
-            style: const TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle,
-            style: const TextStyle(color: AppColors.muted, fontSize: 12)),
-      ),
-    );
-  }
-}

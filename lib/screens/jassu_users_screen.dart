@@ -501,13 +501,12 @@ class _JassuUsersScreenState extends State<JassuUsersScreen> {
 
 class _SearchField extends StatelessWidget {
   final ValueChanged<String> onChanged;
-  final double? width;
-  const _SearchField({required this.onChanged, this.width});
+  const _SearchField({required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? 190,
+      width: 190,
       height: 34,
       child: TextField(
         onChanged: onChanged,
