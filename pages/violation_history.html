@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violation History</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+</head>
+<body>
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+            <li><a href="admin_dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+            <h3>Students</h3>
+            <li><a href="student_records.html"><i class="fas fa-user-graduate"></i><span>Student Records</span></a></li>
+            <li><a href="violation_history.html" class="active"><i class="fas fa-history"></i><span>Violation History</span></a></li>
+            <h3>Discipline</h3>
+            <li><a href="disciplinary_action.html"><i class="fas fa-gavel"></i><span>Disciplinary Actions</span></a></li>
+            <li><a href="risk_level.html"><i class="fas fa-exclamation-triangle"></i><span>Risk Level Indicator</span></a></li>
+            <h3>Backup &amp; Reports</h3>
+            <li><a href="data_backup.html"><i class="fas fa-cloud-download-alt"></i><span>Data Backup</span></a></li>
+            <li><a href="import_data.html"><i class="fas fa-file-import"></i><span>Import Data</span></a></li>
+            <h3>System</h3>
+            <li><a href="jassu_users.html"><i class="fas fa-user"></i><span>Jassu User</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
+<div class="main-content">
+    <nav class="navbar">
+        <h1>Violation History</h1>
+    </nav>
+
+    <div class="content">
+
+        <!-- Filter Bar -->
+        <div class="vh-topbar">
+            <input type="text" placeholder="Search by name or student ID...">
+            <select>
+                <option value="">All Types</option>
+                <option value="Minor">Minor</option>
+                <option value="Major">Major</option>
+            </select>
+            <select>
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <div class="vh-table-card">
+            <div class="vh-table-wrap">
+                <table class="vh-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Full Name</th>
+                            <th>Type</th>
+                            <th>Violation</th>
+                            <th>Date</th>
+                            <th>Tally</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- ─── Juan dela Cruz · 223-09673 ─── -->
+                        <!-- Minor tally: 2/5 -->
+                        <tr>
+                            <td class="vh-id">223-09673</td>
+                            <td class="vh-name">Juan dela Cruz</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Failure to wear ID">Failure to wear ID</td>
+                            <td class="vh-date">2025-01-08</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">2/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-09673</td>
+                            <td class="vh-name">Juan dela Cruz</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Late to class">Late to class</td>
+                            <td class="vh-date">2025-02-19</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">2/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Maria Santos · 223-10245 ─── -->
+                        <!-- Minor tally: 3/5, Major tally: 1/3 -->
+                        <tr>
+                            <td class="vh-id">223-10245</td>
+                            <td class="vh-name">Maria Santos</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Improper uniform">Improper uniform</td>
+                            <td class="vh-date">2025-01-10</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">3/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-10245</td>
+                            <td class="vh-name">Maria Santos</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Using phone during class">Using phone during class</td>
+                            <td class="vh-date">2025-02-03</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">3/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-10245</td>
+                            <td class="vh-name">Maria Santos</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Noisy in hallway">Noisy in hallway</td>
+                            <td class="vh-date">2025-03-15</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">3/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-10245</td>
+                            <td class="vh-name">Maria Santos</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Cheating / academic dishonesty">Cheating / academic dishonesty</td>
+                            <td class="vh-date">2025-04-02</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">1/3</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Carlos Reyes · 223-08831 ─── -->
+                        <!-- Major tally: 3/3 MAX -->
+                        <tr>
+                            <td class="vh-id">223-08831</td>
+                            <td class="vh-name">Carlos Reyes</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Fighting / physical altercation">Fighting / physical altercation</td>
+                            <td class="vh-date">2025-01-22</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-08831</td>
+                            <td class="vh-name">Carlos Reyes</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Threats or intimidation">Threats or intimidation</td>
+                            <td class="vh-date">2025-02-28</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-08831</td>
+                            <td class="vh-name">Carlos Reyes</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Bullying">Bullying</td>
+                            <td class="vh-date">2025-04-10</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Ana Gonzales · 223-11402 ─── -->
+                        <!-- Minor tally: 1/5 -->
+                        <tr>
+                            <td class="vh-id">223-11402</td>
+                            <td class="vh-name">Ana Gonzales</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Littering">Littering</td>
+                            <td class="vh-date">2025-03-04</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">1/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Mark Villanueva · 223-07758 ─── -->
+                        <!-- Minor tally: 2/5, Major tally: 1/3 -->
+                        <tr>
+                            <td class="vh-id">223-07758</td>
+                            <td class="vh-name">Mark Villanueva</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Absence without excuse">Absence without excuse</td>
+                            <td class="vh-date">2025-01-17</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">2/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-07758</td>
+                            <td class="vh-name">Mark Villanueva</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Disrespectful language">Disrespectful language</td>
+                            <td class="vh-date">2025-02-25</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">2/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-07758</td>
+                            <td class="vh-name">Mark Villanueva</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Vandalism of school property">Vandalism of school property</td>
+                            <td class="vh-date">2025-03-30</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">1/3</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Liza Fernandez · 223-09014 ─── -->
+                        <!-- Minor tally: 1/5 -->
+                        <tr>
+                            <td class="vh-id">223-09014</td>
+                            <td class="vh-name">Liza Fernandez</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Running in corridors">Running in corridors</td>
+                            <td class="vh-date">2025-02-11</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">1/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Rico Mendoza · 223-12387 ─── -->
+                        <!-- Major tally: 3/3 MAX -->
+                        <tr>
+                            <td class="vh-id">223-12387</td>
+                            <td class="vh-name">Rico Mendoza</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Possession of prohibited items">Possession of prohibited items</td>
+                            <td class="vh-date">2025-01-30</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-12387</td>
+                            <td class="vh-name">Rico Mendoza</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Substance use or possession">Substance use or possession</td>
+                            <td class="vh-date">2025-03-07</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-12387</td>
+                            <td class="vh-name">Rico Mendoza</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Theft">Theft</td>
+                            <td class="vh-date">2025-04-18</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Claire Pascual · 223-10561 ─── -->
+                        <!-- Minor tally: 2/5, Major tally: 1/3 -->
+                        <tr>
+                            <td class="vh-id">223-10561</td>
+                            <td class="vh-name">Claire Pascual</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Vandalism (minor)">Vandalism (minor)</td>
+                            <td class="vh-date">2025-02-06</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">2/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-10561</td>
+                            <td class="vh-name">Claire Pascual</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Late to class">Late to class</td>
+                            <td class="vh-date">2025-03-21</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">2/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-10561</td>
+                            <td class="vh-name">Claire Pascual</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Sexual harassment">Sexual harassment</td>
+                            <td class="vh-date">2025-04-14</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">1/3</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Dennis Bautista · 223-08190 ─── -->
+                        <!-- Minor tally: 1/5 -->
+                        <tr>
+                            <td class="vh-id">223-08190</td>
+                            <td class="vh-name">Dennis Bautista</td>
+                            <td><span class="vh-badge vh-badge-minor">Minor</span></td>
+                            <td class="vh-vname" title="Failure to wear ID">Failure to wear ID</td>
+                            <td class="vh-date">2025-01-29</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-minor"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <div class="vh-pip vh-pip-empty"></div>
+                                    <span class="vh-tally-count">1/5</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ─── Patricia Ramos · 223-11729 ─── -->
+                        <!-- Major tally: 3/3 MAX -->
+                        <tr>
+                            <td class="vh-id">223-11729</td>
+                            <td class="vh-name">Patricia Ramos</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Threats or intimidation">Threats or intimidation</td>
+                            <td class="vh-date">2025-01-15</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-completed">Completed</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-11729</td>
+                            <td class="vh-name">Patricia Ramos</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Bullying">Bullying</td>
+                            <td class="vh-date">2025-02-20</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-ongoing">Ongoing</span></td>
+                            <td>
+                                <div class="vh-act">
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vh-id">223-11729</td>
+                            <td class="vh-name">Patricia Ramos</td>
+                            <td><span class="vh-badge vh-badge-major">Major</span></td>
+                            <td class="vh-vname" title="Fighting / physical altercation">Fighting / physical altercation</td>
+                            <td class="vh-date">2025-04-05</td>
+                            <td>
+                                <div class="vh-tally">
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <div class="vh-pip vh-pip-major"></div>
+                                    <span class="vh-tally-count">3/3</span>
+                                    <span class="vh-tally-max">MAX</span>
+                                </div>
+                            </td>
+                            <td><span class="vh-badge vh-badge-pending">Pending</span></td>
+                            <td>
+                                <div class="vh-act">    
+                                    <button class="vh-btn-view"><i class="fas fa-eye"></i> View</button>
+                                    <button class="vh-btn-del"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- end .content -->
+</div><!-- end .main-content -->
+
+</body>
+</html>

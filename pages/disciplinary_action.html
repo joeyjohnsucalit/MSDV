@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disciplinary Actions</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+<body>
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+            <li><a href="admin_dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+            <h3>Students</h3>
+            <li><a href="student_records.html"><i class="fas fa-user-graduate"></i><span>Student Records</span></a></li>
+            <li><a href="violation_history.html"><i class="fas fa-history"></i><span>Violation History</span></a></li>
+            <h3>Discipline</h3>
+            <li><a href="disciplinary_action.html" class="active"><i class="fas fa-gavel"></i><span>Disciplinary Actions</span></a></li>
+            <li><a href="risk_level.html"><i class="fas fa-exclamation-triangle"></i><span>Risk Level Indicator</span></a></li>
+            <h3>Backup &amp; Reports</h3>
+            <li><a href="data_backup.html"><i class="fas fa-cloud-download-alt"></i><span>Data Backup</span></a></li>
+            <li><a href="import_data.html"><i class="fas fa-file-import"></i><span>Import Data</span></a></li>
+            <h3>System</h3>
+            <li><a href="jassu_users.html"><i class="fas fa-user"></i><span>Jassu User</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
+<div class="main-content">
+    <nav class="navbar">
+        <h1>Disciplinary Actions</h1>
+    </nav>
+
+    <div class="content">
+
+        <!-- Filter Bar -->
+        <div class="da-topbar">
+            <input type="text" placeholder="Search by name or student ID...">
+            <select>
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Completed">Completed</option>
+                <option value="Pending">Pending</option>
+                <option value="Lifted">Lifted</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <div class="da-table-card">
+            <div class="da-table-wrap">
+                <table class="da-table">
+                    <colgroup>
+                        <col style="width:120px">
+                        <col style="width:170px">
+                        <col>
+                        <col style="width:110px">
+                        <col style="width:110px">
+                        <col style="width:110px">
+                        <col style="width:110px">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student</th>
+                            <th>Sanction</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- Carlos Reyes — 3 Major violations (High) -->
+                        <tr>
+                            <td class="da-id">223-08831</td>
+                            <td class="da-name">Carlos Reyes</td>
+                            <td class="da-sanction">Suspension — 5 days</td>
+                            <td class="da-date">2025-01-27</td>
+                            <td class="da-date">2025-01-31</td>
+                            <td><span class="da-badge da-badge-completed">Completed</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+                        <tr>
+                            <td class="da-id">223-08831</td>
+                            <td class="da-name">Carlos Reyes</td>
+                            <td class="da-sanction">Written Warning &amp; Parent Meeting</td>
+                            <td class="da-date">2025-03-03</td>
+                            <td class="da-date">2025-03-03</td>
+                            <td><span class="da-badge da-badge-completed">Completed</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+                        <tr>
+                            <td class="da-id">223-08831</td>
+                            <td class="da-name">Carlos Reyes</td>
+                            <td class="da-sanction">Suspension — 10 days (pending expulsion review)</td>
+                            <td class="da-date">2025-04-14</td>
+                            <td class="da-date">2025-04-25</td>
+                            <td><span class="da-badge da-badge-active">Active</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+
+                        <!-- Rico Mendoza — 3 Major violations (High) -->
+                        <tr>
+                            <td class="da-id">223-12387</td>
+                            <td class="da-name">Rico Mendoza</td>
+                            <td class="da-sanction">Confiscation &amp; Written Warning</td>
+                            <td class="da-date">2025-02-03</td>
+                            <td class="da-date">2025-02-03</td>
+                            <td><span class="da-badge da-badge-completed">Completed</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+                        <tr>
+                            <td class="da-id">223-12387</td>
+                            <td class="da-name">Rico Mendoza</td>
+                            <td class="da-sanction">Suspension — 7 days</td>
+                            <td class="da-date">2025-03-10</td>
+                            <td class="da-date">2025-03-17</td>
+                            <td><span class="da-badge da-badge-completed">Completed</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+                        <tr>
+                            <td class="da-id">223-12387</td>
+                            <td class="da-name">Rico Mendoza</td>
+                            <td class="da-sanction">Suspension — 10 days &amp; Counseling</td>
+                            <td class="da-date">2025-04-21</td>
+                            <td class="da-date">2025-05-02</td>
+                            <td><span class="da-badge da-badge-pending">Pending</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+
+                        <!-- Patricia Ramos — 3 Major violations (High) -->
+                        <tr>
+                            <td class="da-id">223-11729</td>
+                            <td class="da-name">Patricia Ramos</td>
+                            <td class="da-sanction">Written Warning &amp; Counseling</td>
+                            <td class="da-date">2025-01-20</td>
+                            <td class="da-date">2025-01-20</td>
+                            <td><span class="da-badge da-badge-completed">Completed</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+                        <tr>
+                            <td class="da-id">223-11729</td>
+                            <td class="da-name">Patricia Ramos</td>
+                            <td class="da-sanction">Suspension — 5 days</td>
+                            <td class="da-date">2025-02-24</td>
+                            <td class="da-date">2025-02-28</td>
+                            <td><span class="da-badge da-badge-active">Active</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+                        <tr>
+                            <td class="da-id">223-11729</td>
+                            <td class="da-name">Patricia Ramos</td>
+                            <td class="da-sanction">Suspension — 10 days &amp; Parent Conference</td>
+                            <td class="da-date">2025-04-07</td>
+                            <td class="da-date">2025-04-17</td>
+                            <td><span class="da-badge da-badge-pending">Pending</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+
+                        <!-- Maria Santos — 1 Major violation (Medium) -->
+                        <tr>
+                            <td class="da-id">223-10245</td>
+                            <td class="da-name">Maria Santos</td>
+                            <td class="da-sanction">Academic Integrity Warning &amp; Zero on Exam</td>
+                            <td class="da-date">2025-04-05</td>
+                            <td class="da-date">2025-04-05</td>
+                            <td><span class="da-badge da-badge-active">Active</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+
+                        <!-- Mark Villanueva — 1 Major violation (Medium) -->
+                        <tr>
+                            <td class="da-id">223-07758</td>
+                            <td class="da-name">Mark Villanueva</td>
+                            <td class="da-sanction">Community Service — 8 hours &amp; Repair of Damages</td>
+                            <td class="da-date">2025-04-02</td>
+                            <td class="da-date">2025-04-09</td>
+                            <td><span class="da-badge da-badge-pending">Pending</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+
+                        <!-- Claire Pascual — 1 Major violation (Medium) -->
+                        <tr>
+                            <td class="da-id">223-10561</td>
+                            <td class="da-name">Claire Pascual</td>
+                            <td class="da-sanction">Suspension — 3 da   ys &amp; Mandatory Counseling</td>
+                            <td class="da-date">2025-04-16</td>
+                            <td class="da-date">2025-04-18</td>
+                            <td><span class="da-badge da-badge-pending">Pending</span></td>
+                            <td><button class="da-btn-update"><i class="fas fa-pen"></i> Update</button></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- end .content -->
+</div><!-- end .main-content -->
+
+</body>
+</html>

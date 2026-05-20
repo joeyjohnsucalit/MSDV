@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Data</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+    <style>
+        .import-container {
+            padding: 24px;
+            max-width: 900px;
+        }
+
+        .import-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .import-card h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .import-card h2 i {
+            color: #3b82f6;
+            font-size: 16px;
+        }
+
+        .import-card p.card-desc {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0 0 20px 0;
+        }
+
+        /* Drop Zone */
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .drop-zone .dz-icon {
+            width: 52px;
+            height: 52px;
+            background: #dbeafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+
+        .drop-zone .dz-icon i {
+            font-size: 22px;
+            color: #3b82f6;
+        }
+
+        .drop-zone h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 6px 0;
+        }
+
+        .drop-zone p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin: 0 0 16px 0;
+        }
+
+        .drop-zone .browse-btn {
+            display: inline-block;
+            background: #3b82f6;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .drop-zone .file-types {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* File info after selection */
+        .file-info {
+            display: none;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            margin-top: 16px;
+        }
+
+        .file-info.visible { display: flex; }
+
+        .file-info .fi-icon {
+            width: 40px;
+            height: 40px;
+            background: #dcfce7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .file-info .fi-icon i { color: #16a34a; font-size: 18px; }
+
+        .file-info .fi-details { flex: 1; }
+        .file-info .fi-name { font-size: 14px; font-weight: 600; color: #15803d; }
+        .file-info .fi-size { font-size: 12px; color: #64748b; }
+
+        .file-info .fi-remove {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+
+        .file-info .fi-remove:hover { color: #ef4444; }
+
+        /* Import type selector */
+        .import-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .import-type-option {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .import-type-option:hover { border-color: #93c5fd; background: #f8fafc; }
+
+        .import-type-option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .import-type-option i {
+            font-size: 22px;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .import-type-option.selected i { color: #3b82f6; }
+
+        .import-type-option span {
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            display: block;
+        }
+
+        .import-type-option.selected span { color: #1d4ed8; }
+
+        /* Options row */
+        .options-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-group select,
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #374151;
+            background: #fff;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-group select:focus,
+        .form-group input[type="text"]:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+        /* Checkbox options */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+
+        .checkbox-item span {
+            font-size: 13px;
+            color: #374151;
+        }
+
+        /* Preview table */
+        .preview-section {
+            display: none;
+        }
+
+        .preview-section.visible { display: block; }
+
+        .preview-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-section h3 i { color: #3b82f6; font-size: 14px; }
+
+        .preview-wrapper {
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+
+        .preview-table thead th {
+            background: #f1f5f9;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .preview-table tbody tr:nth-child(even) { background: #f8fafc; }
+
+        .preview-table tbody td {
+            padding: 9px 14px;
+            color: #374151;
+            border-bottom: 1px solid #f1f5f9;
+            white-space: nowrap;
+        }
+
+        .preview-note {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        /* Progress */
+        .progress-section {
+            display: none;
+        }
+
+        .progress-section.visible { display: block; }
+
+        .progress-bar-wrap {
+            background: #f1f5f9;
+            border-radius: 99px;
+            height: 10px;
+            overflow: hidden;
+            margin: 10px 0 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 99px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .alert.visible { display: flex; }
+        .alert i { margin-top: 1px; flex-shrink: 0; }
+
+        .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+        .alert-error   { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+        .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+
+        /* Action buttons */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
+        }
+
+        .btn-primary { background: #3b82f6; color: #fff; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-primary:disabled { background: #93c5fd; cursor: not-allowed; }
+
+        .btn-outline {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
+
+        .btn-danger { background: #ef4444; color: #fff; }
+        .btn-danger:hover { background: #dc2626; }
+
+        /* History table */
+        .history-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .history-table th {
+            text-align: left; padding: 10px 14px;
+            background: #f8fafc; color: #64748b;
+            font-weight: 600; border-bottom: 1px solid #e2e8f0;
+        }
+        .history-table td {
+            padding: 11px 14px;
+            color: #374151;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .history-table tr:last-child td { border-bottom: none; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 11.5px;
+            font-weight: 500;
+        }
+        .badge-success { background: #dcfce7; color: #15803d; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-error   { background: #fee2e2; color: #b91c1c; }
+
+        .spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+            <li><a href="admin_dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+            <h3>Students</h3>
+            <li><a href="student_records.html"><i class="fas fa-user-graduate"></i><span>Student Records</span></a></li>
+            <li><a href="violation_history.html"><i class="fas fa-history"></i><span>Violation History</span></a></li>
+            <h3>Discipline</h3>
+            <li><a href="disciplinary_action.html"><i class="fas fa-gavel"></i><span>Disciplinary Actions</span></a></li>
+            <li><a href="risk_level.html"><i class="fas fa-exclamation-triangle"></i><span>Risk Level Indicator</span></a></li>
+            <h3>Backup & Reports</h3>
+            <li><a href="data_backup.html"><i class="fas fa-cloud-download-alt"></i><span>Data Backup</span></a></li>
+            <li><a href="import_data.html" class="active"><i class="fas fa-file-import"></i><span>Import Data</span></a></li>
+            <h3>System</h3>
+            <li><a href="jassu_users.html"><i class="fas fa-user"></i><span>Jassu User</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="main-content">
+    <nav class="navbar">
+        <h1>Import Data</h1>
+    </nav>
+
+    <div class="content">
+        <div class="import-container">
+
+            <!-- Import Type -->
+            <div class="import-card">
+                <h2><i class="fas fa-layer-group"></i> Import Type</h2>
+                <p class="card-desc">Select what kind of data you are importing.</p>
+                <div class="import-type-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    <div class="import-type-option selected" onclick="selectType(this, 'students')">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Student Records</span>
+                    </div>
+                    <div class="import-type-option" onclick="selectType(this, 'violations')">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Violations</span>
+                    </div>
+                </div>
+                <div style="margin-top: 4px;">
+                    <button class="btn btn-outline" onclick="downloadTemplate()" style="font-size:13px;">
+                        <i class="fas fa-download"></i> Download Template for selected type
+                    </button>
+                </div>
+            </div>
+
+            <!-- Upload File -->
+            <div class="import-card">
+                <h2><i class="fas fa-upload"></i> Upload Excel File</h2>
+                <p class="card-desc">Drag and drop your Excel file here, or click to browse. Accepts .xlsx and .xls files.</p>
+
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFileSelect(this)">
+                    <div class="dz-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3>Drag & drop your file here</h3>
+                    <p>or click to browse from your computer</p>
+                    <span class="browse-btn"><i class="fas fa-folder-open"></i> Browse Files</span>
+                    <p class="file-types">Supported formats: .xlsx, .xls, .csv &nbsp;|&nbsp; Max size: 10 MB</p>
+                </div>
+
+                <div class="file-info" id="fileInfo">
+                    <div class="fi-icon"><i class="fas fa-file-excel"></i></div>
+                    <div class="fi-details">
+                        <div class="fi-name" id="fileName">—</div>
+                        <div class="fi-size" id="fileSize">—</div>
+                    </div>
+                    <button class="fi-remove" onclick="removeFile()" title="Remove file"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="import-card">
+                <h2><i class="fas fa-eye"></i> Data Preview</h2>
+                <p class="card-desc">Review the first few rows before committing the import.</p>
+
+                <div id="noPreview" style="padding: 32px; text-align: center; color: #94a3b8;">
+                    <i class="fas fa-table" style="font-size: 32px; margin-bottom: 10px; display: block;"></i>
+                    <span style="font-size: 13px;">Upload a file above to preview your data here.</span>
+                </div>
+
+                <div class="preview-section" id="previewSection">
+                    <h3><i class="fas fa-table"></i> Preview — first 5 rows</h3>
+                    <div class="preview-wrapper">
+                        <table class="preview-table" id="previewTable"></table>
+                    </div>
+                    <p class="preview-note" id="previewNote"></p>
+                </div>
+            </div>
+
+            <!-- Import Action -->
+            <div class="import-card">
+                <h2><i class="fas fa-play-circle"></i> Run Import</h2>
+                <p class="card-desc">Once you're satisfied with the preview, click Import to begin processing.</p>
+
+                <!-- Progress -->
+                <div class="progress-section" id="progressSection">
+                    <div class="progress-label">
+                        <span id="progressText">Importing...</span>
+                        <span id="progressPct">0%</span>
+                    </div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <div class="alert alert-success" id="alertSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <div id="alertSuccessMsg">Import completed successfully.</div>
+                </div>
+                <div class="alert alert-error" id="alertError">
+                    <i class="fas fa-times-circle"></i>
+                    <div id="alertErrorMsg">An error occurred during import.</div>
+                </div>
+                <div class="alert alert-warning" id="alertWarning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div id="alertWarningMsg">Some rows were skipped due to validation issues.</div>
+                </div>
+
+                <br>
+                <div class="action-row">
+                    <button class="btn btn-primary" id="importBtn" onclick="startImport()">
+                        <i class="fas fa-file-import"></i> Import Data
+                    </button>
+                    <button class="btn btn-outline" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Import History -->
+            <div class="import-card">
+                <h2><i class="fas fa-history"></i> Import History</h2>
+                <p class="card-desc">Recent import activities for this system.</p>
+                <div style="overflow-x:auto;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>File Name</th>
+                                <th>Type</th>
+                                <th>Records</th>
+                                <th>Status</th>
+                                <th>Imported By</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody">
+                            <tr>
+                                <td>Apr 22, 2025 &nbsp;10:34 AM</td>
+                                <td>students_batch_april.xlsx</td>
+                                <td>Student Records</td>
+                                <td>142</td>
+                                <td><span class="badge badge-success"><i class="fas fa-check-circle" style="font-size:10px;"></i> Success</span></td>
+                                <td>Admin</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 18, 2025 &nbsp;02:15 PM</td>
+                                <td>violations_q1.xlsx</td>
+                                <td>Violations</td>
+                                <td>87</td>
+                                <td><span class="badge badge-warning"><i class="fas fa-exclamation-triangle" style="font-size:10px;"></i> Partial</span></td>
+                                <td>Admin</td>
+                            </tr>
+                            <tr>
+                                <td>Apr 10, 2025 &nbsp;09:00 AM</td>
+                                <td>disc_actions_march.xlsx</td>
+                                <td>Disciplinary Actions</td>
+                                <td>23</td>
+                                <td><span class="badge badge-success"><i class="fas fa-check-circle" style="font-size:10px;"></i> Success</span></td>
+                                <td>Admin</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../Script/script.js"></script>
+<script>
+    let selectedType = 'students';
+    let selectedFile = null;
+    let parsedData = null;
+
+    // ─── Drag & Drop ───────────────────────────────────────────────
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) processFile(file);
+    });
+
+    // ─── File Selection ─────────────────────────────────────────────
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        if (file) processFile(file);
+    }
+
+    function processFile(file) {
+        const allowed = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                         'application/vnd.ms-excel', 'text/csv'];
+        const ext = file.name.split('.').pop().toLowerCase();
+
+        if (!['xlsx','xls','csv'].includes(ext)) {
+            showAlert('error', 'Unsupported file type. Please upload an .xlsx, .xls, or .csv file.');
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            showAlert('error', 'File exceeds the 10 MB limit. Please use a smaller file.');
+            return;
+        }
+
+        selectedFile = file;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = formatSize(file.size);
+        document.getElementById('fileInfo').classList.add('visible');
+
+        hideAlerts();
+        readExcel(file);
+    }
+
+    function readExcel(file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+                parsedData = json;
+                renderPreview(json);
+            } catch(err) {
+                showAlert('error', 'Could not read the file. Make sure it is a valid Excel or CSV file.');
+            }
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function renderPreview(rows) {
+        if (!rows || rows.length === 0) {
+            showAlert('warning', 'The file appears to be empty.');
+            return;
+        }
+
+        const table = document.getElementById('previewTable');
+        table.innerHTML = '';
+        const preview = rows.slice(0, 6);
+
+        preview.forEach((row, i) => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+                const td = document.createElement(i === 0 ? 'th' : 'td');
+                td.textContent = cell !== undefined ? cell : '';
+                tr.appendChild(td);
+            });
+            table.appendChild(tr);
+        });
+
+        document.getElementById('previewNote').textContent =
+            `Showing ${Math.min(5, rows.length - 1)} of ${rows.length - 1} data rows (excluding header).`;
+
+        document.getElementById('noPreview').style.display = 'none';
+        document.getElementById('previewSection').classList.add('visible');
+    }
+
+    function removeFile() {
+        selectedFile = null;
+        parsedData = null;
+        document.getElementById('fileInput').value = '';
+        document.getElementById('fileInfo').classList.remove('visible');
+        document.getElementById('previewSection').classList.remove('visible');
+        document.getElementById('noPreview').style.display = '';
+        hideAlerts();
+    }
+
+    // ─── Import Type ────────────────────────────────────────────────
+    function selectType(el, type) {
+        document.querySelectorAll('.import-type-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedType = type;
+    }
+
+    // ─── Start Import ────────────────────────────────────────────────
+    function startImport() {
+        if (!selectedFile) {
+            showAlert('error', 'Please upload a file before importing.');
+            return;
+        }
+
+        hideAlerts();
+        const btn = document.getElementById('importBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Importing...';
+
+        const progress = document.getElementById('progressSection');
+        const fill = document.getElementById('progressFill');
+        const pct = document.getElementById('progressPct');
+        const txt = document.getElementById('progressText');
+        progress.classList.add('visible');
+
+        let pVal = 0;
+        const steps = [
+            [10, 'Validating file...'],
+            [30, 'Parsing rows...'],
+            [60, 'Processing records...'],
+            [85, 'Writing to database...'],
+            [100, 'Finalizing...']
+        ];
+        let si = 0;
+
+        const interval = setInterval(() => {
+            if (si >= steps.length) {
+                clearInterval(interval);
+                importComplete();
+                return;
+            }
+            [pVal, txt.textContent] = steps[si];
+            fill.style.width = pVal + '%';
+            pct.textContent = pVal + '%';
+            si++;
+        }, 600);
+    }
+
+    function importComplete() {
+        const totalRows = parsedData ? parsedData.length - 1 : 0;
+        const skipped = Math.floor(totalRows * 0.03);
+        const imported = totalRows - skipped;
+
+        document.getElementById('importBtn').disabled = false;
+        document.getElementById('importBtn').innerHTML = '<i class="fas fa-file-import"></i> Import Data';
+        document.getElementById('progressSection').classList.remove('visible');
+
+        showAlert('success', `Import completed! ${imported} record(s) imported successfully.`);
+        if (skipped > 0) showAlert('warning', `${skipped} row(s) were skipped due to duplicate or missing required fields.`);
+
+        addHistoryRow(selectedFile.name, selectedType, imported, skipped > 0 ? 'partial' : 'success');
+    }
+
+    function addHistoryRow(name, type, count, status) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) +
+                        ' &nbsp;' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+        const typeMap = { students: 'Student Records', violations: 'Violations', disciplinary: 'Disciplinary Actions' };
+        const statusBadge = status === 'success'
+            ? '<span class="badge badge-success"><i class="fas fa-check-circle" style="font-size:10px;"></i> Success</span>'
+            : '<span class="badge badge-warning"><i class="fas fa-exclamation-triangle" style="font-size:10px;"></i> Partial</span>';
+
+        const tbody = document.getElementById('historyBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${dateStr}</td><td>${name}</td><td>${typeMap[type]||type}</td><td>${count}</td><td>${statusBadge}</td><td>Admin</td>`;
+        tbody.insertBefore(tr, tbody.firstChild);
+    }
+
+    // ─── Reset ───────────────────────────────────────────────────────
+    function resetForm() {
+        removeFile();
+        document.getElementById('progressSection').classList.remove('visible');
+        document.querySelectorAll('.import-type-option').forEach((o,i) => {
+            o.classList.toggle('selected', i === 0);
+        });
+        selectedType = 'students';
+    }
+
+    // ─── Template Download ─────────────────────────────────────────
+    function downloadTemplate() {
+        const templates = {
+            students:   [['Student ID', 'Full Name', 'Course', 'Year', 'Department', 'Risk Level']],
+            violations: [['Student ID', 'Full Name', 'Type of Violation', 'Date', 'Sanction', 'Status', 'Actions']]
+        };
+        const sheetNames = { students: 'Student Records', violations: 'Violations' };
+        const fileNames  = { students: 'student_records_template.xlsx', violations: 'violations_template.xlsx' };
+
+        const headers = templates[selectedType];
+        const ws = XLSX.utils.aoa_to_sheet(headers);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, sheetNames[selectedType]);
+        XLSX.writeFile(wb, fileNames[selectedType]);
+    }
+
+    // ─── Alerts ──────────────────────────────────────────────────────
+    function showAlert(type, msg) {
+        const map = { success: 'alertSuccess', error: 'alertError', warning: 'alertWarning' };
+        const msgMap = { success: 'alertSuccessMsg', error: 'alertErrorMsg', warning: 'alertWarningMsg' };
+        document.getElementById(msgMap[type]).textContent = msg;
+        document.getElementById(map[type]).classList.add('visible');
+    }
+
+    function hideAlerts() {
+        ['alertSuccess','alertError','alertWarning'].forEach(id => {
+            document.getElementById(id).classList.remove('visible');
+        });
+    }
+
+    // ─── Helpers ─────────────────────────────────────────────────────
+    function formatSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+</script>
+</body>
+</html>

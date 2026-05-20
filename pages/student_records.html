@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+
+    <!-- ══════════════════════════════════════
+         STUDENT RECORDS PAGE CSS
+         All classes prefixed with .stdr-
+         Paste this entire <style> block into
+         your main CSS file as-is.
+    ══════════════════════════════════════ -->
+    <style>
+
+
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════ -->
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+            <li><a href="admin_dashboard.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+            <h3>Students</h3>
+            <li><a href="student_records.html" class="active"><i class="fas fa-user-graduate"></i><span>Student Records</span></a></li>
+            <li><a href="violation_history.html"><i class="fas fa-history"></i><span>Violation History</span></a></li>
+            <h3>Discipline</h3>
+            <li><a href="disciplinary_action.html"><i class="fas fa-gavel"></i><span>Disciplinary Actions</span></a></li>
+            <li><a href="risk_level.html"><i class="fas fa-exclamation-triangle"></i><span>Risk Level Indicator</span></a></li>
+            <h3>Backup &amp; Reports</h3>
+            <li><a href="data_backup.html"><i class="fas fa-cloud-download-alt"></i><span>Data Backup</span></a></li>
+            <li><a href="import_data.html"><i class="fas fa-file-import"></i><span>Import Data</span></a></li>
+            <h3>System</h3>
+            <li><a href="jassu_users.html"><i class="fas fa-user"></i><span>Jassu User</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════ -->
+<div class="main-content">
+    <nav class="navbar">
+        <h1>Student Records</h1>
+    </nav>
+
+    <div class="content">
+
+        <!-- Filter Bar -->
+        <div class="stdr-topbar">
+            <div class="stdr-filter">
+                <input type="text" placeholder="Search Student...">
+                <select>
+                    <option value="">All Departments</option>
+                    <option value="School of Technology">School of Technology</option>
+                    <option value="School of Education">School of Education</option>
+                    <option value="School of Business">School of Business</option>
+                </select>
+                <select>
+                    <option value="">All Year Levels</option>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                </select>
+                <button class="stdr-btn-outline">Reset</button>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="stdr-table-card">
+            <h3>Student Records</h3>
+            <div class="stdr-table-wrap">
+                <table class="stdr-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Full Name</th>
+                            <th>Course</th>
+                            <th>Year</th>
+                            <th>Section</th>
+                            <th>Department</th>
+                            <th>Risk Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td class="stdr-id">223-09673</td>
+                            <td class="stdr-name">Juan dela Cruz</td>
+                            <td>BSIT</td>
+                            <td>3rd Year</td>
+                            <td>A</td>
+                            <td>School of Technology</td>
+                            <td><span class="stdr-badge stdr-badge-low">Low</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-10245</td>
+                            <td class="stdr-name">Maria Santos</td>
+                            <td>BIT</td>
+                            <td>2nd Year</td>
+                            <td>B</td>
+                            <td>School of Technology</td>
+                            <td><span class="stdr-badge stdr-badge-medium">Medium</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-08831</td>
+                            <td class="stdr-name">Carlos Reyes</td>
+                            <td>BSEd</td>
+                            <td>4th Year</td>
+                            <td>C</td>
+                            <td>School of Education</td>
+                            <td><span class="stdr-badge stdr-badge-high">High</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-11402</td>
+                            <td class="stdr-name">Ana Gonzales</td>
+                            <td>BEEd</td>
+                            <td>1st Year</td>
+                            <td>A</td>
+                            <td>School of Education</td>
+                            <td><span class="stdr-badge stdr-badge-low">Low</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-07758</td>
+                            <td class="stdr-name">Mark Villanueva</td>
+                            <td>BSBA</td>
+                            <td>3rd Year</td>
+                            <td>B</td>
+                            <td>School of Business</td>
+                            <td><span class="stdr-badge stdr-badge-medium">Medium</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-09014</td>
+                            <td class="stdr-name">Liza Fernandez</td>
+                            <td>BSIT</td>
+                            <td>4th Year</td>
+                            <td>A</td>
+                            <td>School of Technology</td>
+                            <td><span class="stdr-badge stdr-badge-low">Low</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-12387</td>
+                            <td class="stdr-name">Rico Mendoza</td>
+                            <td>BSMA</td>
+                            <td>1st Year</td>
+                            <td>C</td>
+                            <td>School of Business</td>
+                            <td><span class="stdr-badge stdr-badge-high">High</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-10561</td>
+                            <td class="stdr-name">Claire Pascual</td>
+                            <td>BEEd</td>
+                            <td>2nd Year</td>
+                            <td>B</td>
+                            <td>School of Education</td>
+                            <td><span class="stdr-badge stdr-badge-medium">Medium</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-08190</td>
+                            <td class="stdr-name">Dennis Bautista</td>
+                            <td>BSBA</td>
+                            <td>3rd Year</td>
+                            <td>A</td>
+                            <td>School of Business</td>
+                            <td><span class="stdr-badge stdr-badge-low">Low</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="stdr-id">223-11729</td>
+                            <td class="stdr-name">Patricia Ramos</td>
+                            <td>BSEd</td>
+                            <td>4th Year</td>
+                            <td>C</td>
+                            <td>School of Education</td>
+                            <td><span class="stdr-badge stdr-badge-high">High</span></td>
+                            <td>
+                                <div class="stdr-actions">
+                                    <button class="stdr-btn-view"><i class="fas fa-eye"></i> View</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- end .content -->
+</div><!-- end .main-content -->
+
+</body>
+</html>

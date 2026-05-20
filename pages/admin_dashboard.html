@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+                <li>
+                    <a href="admin_dashboard.html" class="active">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            <h3>Students</h3>
+                <li>
+                    <a href="student_records.html">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Student Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="violation_history.html">
+                        <i class="fas fa-history"></i>
+                        <span>Violation History</span>
+                    </a>
+                </li>
+            <h3>Discipline</h3>
+                <li>
+                    <a href="disciplinary_action.html">
+                        <i class="fas fa-gavel"></i>
+                        <span>Disciplinary Actions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="risk_level.html">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Risk Level Indicator</span>
+                    </a>
+                </li>
+            <h3>Backup & Reports</h3>
+                <li>
+                    <a href="data_backup.html">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        <span>Data Backup</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="import_data.html">
+                        <i class="fas fa-file-import"></i>
+                        <span>Import Data</span>
+                    </a>
+                </li>
+            <h3>System</h3>
+                <li>
+                    <a href="jassu_users.html">
+                        <i class="fas fa-user"></i>
+                        <span>Jassu User</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+        </ul>
+    </div>
+</div>
+
+<div class="main-content">
+    <nav class="navbar">
+        <h1>Dashboard</h1>
+        <span id="liveDateBadge"></span>
+    </nav>
+
+    <div class="content">
+
+        <!-- OVERVIEW -->
+        <p class="section-label">Overview</p>
+        <div class="cards">
+            <div class="stats blue">
+                <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="card-value">1,248</div>
+                <div class="card-label">Total Students</div>
+            </div>
+            <div class="stats red">
+                <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="card-value">376</div>
+                <div class="card-label">Total Violations</div>
+            </div>
+            <div class="stats yellow">
+                <div class="card-icon"><i class="fas fa-clock"></i></div>
+                <div class="card-value">54</div>
+                <div class="card-label">Pending Actions</div>
+            </div>
+            <div class="stats green">
+                <div class="card-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="card-value">298</div>
+                <div class="card-label">Completed Cases</div>
+            </div>
+        </div>
+
+        <!-- VIOLATION TRENDS -->
+        <p class="section-label">Violation Trends</p>
+        <div class="chart-row">
+            <div class="chart-panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Monthly Violations</div>
+                        <div class="panel-sub">Recorded violation events per month</div>
+                    </div>
+                    <div class="filter-row">
+                        <select class="filter-select" id="yearFilter1" onchange="updateMonthlyChart()">
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
+                    </div>
+                </div>
+                <canvas id="monthlyChart" height="200"></canvas>
+            </div>
+            <div class="chart-panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-title">Minor vs Major</div>
+                        <div class="panel-sub">Offense type breakdown</div>
+                    </div>
+                </div>
+                <canvas id="minorMajorChart" height="140"></canvas>
+            </div>
+        </div>
+
+        <!-- VIOLATIONS PER DEPARTMENT -->
+     
+        <div class="chart-panel" style="width: 99.2%;">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title">Monthly by Department</div>
+                    <div class="panel-sub">SOT · SOB · SOE breakdown</div>
+                </div>
+                <div class="filter-row">
+                    <select class="filter-select" id="deptLineYear" onchange="updateDeptLineChart()">
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>   
+                </div>
+            </div>
+            <canvas id="deptLineChart" height="120"></canvas>
+        </div>
+
+    </div> <!-- closes .content -->
+</div>     <!-- closes .main-content -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="../Script/script.js"></script>
+
+</body>
+</html>

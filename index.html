@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="CSS/style.css" />
+    <title>MSDV | Log in</title>
+  </head>
+  <body>
+    <div
+      class="container d-flex justify-content-center align-items-center"
+      style="min-height: 100vh;"
+      id="login-form"
+    >
+      <div class="mcclogo">
+        <img src="images/mccLogo.png" class="loginlogo" />
+      </div>
+      <form
+        class="formbox shadow p-3 rounded"
+        style="width: 350px;"
+        action="pages/admin_dashboard.html"
+        method=""
+      >
+        <div class="mb-3" style="margin: 70px 0;">
+          <label for="username" class="form-label">USERNAME</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            id="username"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">PASSWORD</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+            style="padding-bottom: 10px;"
+            placeholder="Enter your password"
+          />
+        </div>
+        <hr style="color: white; height: 2px; margin-bottom: 20px;" />
+        <button type="submit" class="btn btn-primary">SIGN IN</button>
+        <hr style="border: none;" />
+      </form>
+    </div>
+
+    <script src="Script/cript.js"></script>
+  </body>
+</html>

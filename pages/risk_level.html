@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Level Indicator</title>
+    <link rel="stylesheet" href="../CSS/admin_dashboard.css">
+
+    <style>
+        /* ── Content: Risk Level Indicator ── */
+
+        .content {
+            padding: 28px;
+        }
+
+    
+    </style>
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<div class="sidebar">
+    <div class="adm_logo">
+        <img src="../images/mccLogo.png" alt="">
+        <div class="logotext">
+            <h2>Admin Panel</h2>
+            <p>MCC Student Violation System</p>
+        </div>
+    </div>
+    <div class="sidebar_content">
+        <ul>
+            <h3>Overview</h3>
+            <li>
+                <a href="admin_dashboard.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <h3>Students</h3>
+            <li>
+                <a href="student_records.html">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Student Records</span>
+                </a>
+            </li>
+            <li>
+                <a href="violation_history.html">
+                    <i class="fas fa-history"></i>
+                    <span>Violation History</span>
+                </a>
+            </li>
+
+            <h3>Discipline</h3>
+            <li>
+                <a href="disciplinary_action.html">
+                    <i class="fas fa-gavel"></i>
+                    <span>Disciplinary Actions</span>
+                </a>
+            </li>
+            <li>
+                <a href="risk_level.html" class="active">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Risk Level Indicator</span>
+                </a>
+            </li>
+
+            <h3>Backup &amp; Reports</h3>
+            <li>
+                <a href="data_backup.html">
+                    <i class="fas fa-cloud-download-alt"></i>
+                    <span>Data Backup</span>
+                </a>
+            </li>
+            <li>
+                <a href="import_data.html">
+                    <i class="fas fa-file-import"></i>
+                    <span>Import Data</span>
+                </a>
+            </li>
+
+            <h3>System</h3>
+            <li>
+                <a href="jassu_users.html">
+                    <i class="fas fa-user"></i>
+                    <span>Jassu User</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- ── Main Content ── -->
+<div class="main-content">
+
+    <nav class="navbar">
+        <h1>Risk Level Indicator</h1>
+    </nav>
+
+    <div class="content">
+
+        <!-- Summary Cards -->
+        <div class="risk-summary-row">
+            <div class="risk-summary-card">
+                <div class="rs-icon rs-icon-low"><i class="fas fa-shield-alt"></i></div>
+                <span class="rs-value rs-low">4</span>
+                <span class="rs-label">Low Risk</span>
+            </div>
+            <div class="risk-summary-card">
+                <div class="rs-icon rs-icon-medium"><i class="fas fa-exclamation-circle"></i></div>
+                <span class="rs-value rs-medium">2</span>
+                <span class="rs-label">Medium Risk</span>
+            </div>
+            <div class="risk-summary-card">
+                <div class="rs-icon rs-icon-high"><i class="fas fa-exclamation-triangle"></i></div>
+                <span class="rs-value rs-high">1</span>
+                <span class="rs-label">High Risk</span>
+            </div>
+            <div class="risk-summary-card">
+                <div class="rs-icon rs-icon-critical"><i class="fas fa-skull-crossbones"></i></div>
+                <span class="rs-value rs-critical">3</span>
+                <span class="rs-label">Critical</span>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="risk-legend">
+            <span class="risk-legend-item"><span class="risk-legend-dot rld-low"></span> Low</span>
+            <span class="risk-legend-item"><span class="risk-legend-dot rld-medium"></span> Medium</span>
+            <span class="risk-legend-item"><span class="risk-legend-dot rld-high"></span> High</span>
+            <span class="risk-legend-item"><span class="risk-legend-dot rld-critical"></span> Critical</span>
+        </div>
+
+        <!-- Table -->
+        <div class="risk-table-wrap">
+            <table id="riskTable">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Minor Tally</th>
+                        <th>Major Tally</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="risk-student-id">2024-0001</td>
+                        <td class="risk-student-name">Alcantara, Maria Joy T.</td>
+                        <td><span class="tally-badge tally-minor">0</span></td>
+                        <td><span class="tally-badge tally-major">0</span></td>
+                        <td><span class="risk-pill rp-low"><span class="risk-pill-dot"></span>Low</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2024-0042</td>
+                        <td class="risk-student-name">Bautista, Carlo Miguel R.</td>
+                        <td><span class="tally-badge tally-minor">2</span></td>
+                        <td><span class="tally-badge tally-major">0</span></td>
+                        <td><span class="risk-pill rp-low"><span class="risk-pill-dot"></span>Low</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2023-0118</td>
+                        <td class="risk-student-name">Cruz, Angelica F.</td>
+                        <td><span class="tally-badge tally-minor">3</span></td>
+                        <td><span class="tally-badge tally-major">1</span></td>
+                        <td><span class="risk-pill rp-high"><span class="risk-pill-dot"></span>High</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2023-0205</td>
+                        <td class="risk-student-name">Dela Rosa, John Paul V.</td>
+                        <td><span class="tally-badge tally-minor">5</span></td>
+                        <td><span class="tally-badge tally-major">2</span></td>
+                        <td><span class="risk-pill rp-critical"><span class="risk-pill-dot"></span>Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2022-0310</td>
+                        <td class="risk-student-name">Fernandez, Kristine Mae A.</td>
+                        <td><span class="tally-badge tally-minor">1</span></td>
+                        <td><span class="tally-badge tally-major">0</span></td>
+                        <td><span class="risk-pill rp-low"><span class="risk-pill-dot"></span>Low</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2022-0447</td>
+                        <td class="risk-student-name">Garcia, Renz Oliver B.</td>
+                        <td><span class="tally-badge tally-minor">4</span></td>
+                        <td><span class="tally-badge tally-major">3</span></td>
+                        <td><span class="risk-pill rp-critical"><span class="risk-pill-dot"></span>Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2021-0503</td>
+                        <td class="risk-student-name">Herrera, Sofia Isabelle L.</td>
+                        <td><span class="tally-badge tally-minor">2</span></td>
+                        <td><span class="tally-badge tally-major">1</span></td>
+                        <td><span class="risk-pill rp-medium"><span class="risk-pill-dot"></span>Medium</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2024-0089</td>
+                        <td class="risk-student-name">Ilagan, Luis Rafael C.</td>
+                        <td><span class="tally-badge tally-minor">0</span></td>
+                        <td><span class="tally-badge tally-major">0</span></td>
+                        <td><span class="risk-pill rp-low"><span class="risk-pill-dot"></span>Low</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2023-0612</td>
+                        <td class="risk-student-name">Jimenez, Patricia Ann D.</td>
+                        <td><span class="tally-badge tally-minor">6</span></td>
+                        <td><span class="tally-badge tally-major">4</span></td>
+                        <td><span class="risk-pill rp-critical"><span class="risk-pill-dot"></span>Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td class="risk-student-id">2022-0731</td>
+                        <td class="risk-student-name">Lim, Kenneth Bryan O.</td>
+                        <td><span class="tally-badge tally-minor">3</span></td>
+                        <td><span class="tally-badge tally-major">0</span></td>
+                        <td><span class="risk-pill rp-medium"><span class="risk-pill-dot"></span>Medium</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div><!-- end .content -->
+</div><!-- end .main-content -->
+
+</body>
+</html>
