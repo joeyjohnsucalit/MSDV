@@ -11,279 +11,618 @@ class JassuDashboardScreen extends StatefulWidget {
 class _JassuDashboardScreenState extends State<JassuDashboardScreen> {
   final _studentIdCtrl = TextEditingController();
   final _fullNameCtrl = TextEditingController();
-  final _violationCtrl = TextEditingController();
-  String _violationType = 'Minor';
-  final List<_ViolationEntry> _submissions = [];
+  final _descriptionCtrl = TextEditingController();
+
+  String? _selectedCourse;
+  String? _selectedYear;
+  String? _selectedDepartment;
+  bool _hasSignature = false;
+  final Set<String> _selectedViolations = {};
+
+  final List<String> _courses = [
+    'BSIT',
+    'BSCS',
+    'BSBA',
+    'BSECE',
+    'BSCE',
+    'BSN',
+    'BSED',
+    'BSHM',
+    'Other',
+  ];
+
+  final List<String> _yearLevels = [
+    '1st Year',
+    '2nd Year',
+    '3rd Year',
+    '4th Year',
+  ];
+
+  final List<String> _departments = [
+    'School of Technology',
+    'College of Information Technology',
+    'College of Business and Management',
+    'College of Health Sciences',
+    'College of Education',
+    'College of Hospitality and Tourism',
+    'Other',
+  ];
+
+  final List<String> _violationTypes = [
+    'Academic Dishonesty',
+    'Insubordination',
+    'Attendance Issue',
+    'Disruptive Behavior',
+    'Harassment',
+    'Policy Violation',
+    'Other (please specify in description)',
+  ];
+
+  void _toggleViolation(String violation) {
+    setState(() {
+      if (_selectedViolations.contains(violation)) {
+        _selectedViolations.remove(violation);
+      } else {
+        _selectedViolations.add(violation);
+      }
+    });
+  }
+
+  void _clearSignature() {
+    setState(() {
+      _hasSignature = false;
+    });
+  }
+
+  void _captureSignature() {
+    setState(() {
+      _hasSignature = true;
+    });
+  }
 
   void _submitViolation() {
-    if (_studentIdCtrl.text.isEmpty || _fullNameCtrl.text.isEmpty || _violationCtrl.text.isEmpty) {
+    final missingFields = <String>[];
+    if (_studentIdCtrl.text.trim().isEmpty) {
+      missingFields.add('Student ID');
+    }
+    if (_fullNameCtrl.text.trim().isEmpty) {
+      missingFields.add('Full Name');
+    }
+    if (_selectedCourse == null) {
+      missingFields.add('Course');
+    }
+    if (_selectedYear == null) {
+      missingFields.add('Year Level');
+    }
+    if (_selectedDepartment == null) {
+      missingFields.add('Department');
+    }
+    if (_selectedViolations.isEmpty) {
+      missingFields.add('Violation Type');
+    }
+    if (!_hasSignature) {
+      missingFields.add('Signature');
+    }
+
+    if (missingFields.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          backgroundColor: Color(0xFFb40404),
+        SnackBar(
+          content: Text('Please complete: ${missingFields.join(', ')}'),
+          backgroundColor: const Color(0xFFb40404),
         ),
       );
       return;
     }
 
     setState(() {
-      _submissions.insert(
-        0,
-        _ViolationEntry(
-          studentId: _studentIdCtrl.text,
-          fullName: _fullNameCtrl.text,
-          violation: _violationCtrl.text,
-          type: _violationType,
-          timestamp: DateTime.now(),
-        ),
-      );
       _studentIdCtrl.clear();
       _fullNameCtrl.clear();
-      _violationCtrl.clear();
-      _violationType = 'Minor';
+      _descriptionCtrl.clear();
+      _selectedCourse = null;
+      _selectedYear = null;
+      _selectedDepartment = null;
+      _selectedViolations.clear();
+      _hasSignature = false;
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Violation recorded successfully'),
+        content: Text('Violation report submitted successfully'),
         backgroundColor: Color(0xFF10B981),
+      ),
+    );
+  }
+
+  Widget _sectionHeader(IconData icon, String title, Color background) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: background.withOpacity(0.18),
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Icon(icon, size: 16, color: background),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: AppColors.muted,
+            letterSpacing: 0.08,
+            textBaseline: TextBaseline.alphabetic,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _fieldLabel(String label, {bool required = false}) {
+    return Text.rich(
+      TextSpan(
+        text: label,
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: AppColors.muted,
+          letterSpacing: 0.06,
+          height: 1.4,
+        ),
+        children: required
+            ? [
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(color: Color(0xFFCC0000)),
+                )
+              ]
+            : [],
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration({String? hintText}) {
+    return InputDecoration(
+      hintText: hintText,
+      filled: true,
+      fillColor: const Color(0xFFF4F5F8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(9),
+        borderSide: const BorderSide(color: AppColors.border),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(9),
+        borderSide: const BorderSide(color: AppColors.border),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 480;
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('JASSU DASHBOARD',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
-                color: AppColors.muted,
-              )),
-          const SizedBox(height: 14),
-          const Text('Welcome, Security Guard',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: Colors.black87,
-              )),
-          const SizedBox(height: 6),
-          const Text('Report student violations and monitor compliance.',
-              style: TextStyle(fontSize: 14, color: AppColors.muted)),
-          const SizedBox(height: 28),
-          // ── Violation Input Form ──────────────────────────────────────────────
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.border),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+      padding: const EdgeInsets.only(top: 24, bottom: 40),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 18),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
                 ),
-              ],
-            ),
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Report Student Violation',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    )),
-                const SizedBox(height: 6),
-                const Text('Enter the student details and violation information',
-                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
-                const SizedBox(height: 18),
-                // Student ID
-                const Text('Student ID Number',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    )),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _studentIdCtrl,
-                  decoration: InputDecoration(
-                    hintText: 'e.g., 223-09673',
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      top: -30,
+                      right: -30,
+                      child: Container(
+                        width: 160,
+                        height: 160,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.06),
+                        ),
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
+                    Positioned(
+                      bottom: -50,
+                      left: 60,
+                      child: Container(
+                        width: 220,
+                        height: 220,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.04),
+                        ),
+                      ),
                     ),
-                    contentPadding: const EdgeInsets.all(12),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // Full Name
-                const Text('Student Full Name',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    )),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _fullNameCtrl,
-                  decoration: InputDecoration(
-                    hintText: 'e.g., Juan dela Cruz',
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 32, 30, 28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          _BannerLabel(),
+                          SizedBox(height: 14),
+                          Text(
+                            'Violation Report',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Complete all required fields to submit a student violation.',
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 255, 255, 0.6),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: 6,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFCC0000),
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(18)),
+                        ),
+                      ),
                     ),
-                    contentPadding: const EdgeInsets.all(12),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // Violation Type
-                const Text('Violation Type',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    )),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  initialValue: _violationType,
-                  onChanged: (value) {
-                    setState(() => _violationType = value ?? 'Minor');
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
-                    ),
-                    contentPadding: const EdgeInsets.all(12),
-                  ),
-                  items: const [
-                    DropdownMenuItem(value: 'Minor', child: Text('Minor Violation')),
-                    DropdownMenuItem(value: 'Major', child: Text('Major Violation')),
                   ],
                 ),
-                const SizedBox(height: 16),
-                // Violation Description
-                const Text('Violation Description',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    )),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _violationCtrl,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    hintText: 'Describe the violation in detail...',
-                    filled: true,
-                    fillColor: const Color(0xFFF9FAFB),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 18),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(18)),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 18,
+                      offset: const Offset(0, 10),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.border),
-                    ),
-                    contentPadding: const EdgeInsets.all(12),
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _submitViolation,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF030357),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 18),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.border,
+                                    borderRadius: BorderRadius.circular(99),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Container(
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.border,
+                                    borderRadius: BorderRadius.circular(99),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Container(
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFCC0000),
+                                    borderRadius: BorderRadius.circular(99),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Container(
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.border,
+                                    borderRadius: BorderRadius.circular(99),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    child: const Text(
-                      'Submit Violation Report',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 26, 30, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _SectionBlock(
+                            header: _sectionHeader(Icons.person, 'Student Information', AppColors.primary),
+                            child: Column(
+                              children: [
+                                _FieldRow(
+                                  isMobile: isMobile,
+                                  children: [
+                                    _FieldGroup(
+                                      label: _fieldLabel('Student ID', required: true),
+                                      child: TextField(
+                                        controller: _studentIdCtrl,
+                                        decoration: _inputDecoration(hintText: 'e.g. 2024001'),
+                                      ),
+                                    ),
+                                    _FieldGroup(
+                                      label: _fieldLabel('Full Name', required: true),
+                                      child: TextField(
+                                        controller: _fullNameCtrl,
+                                        decoration: _inputDecoration(hintText: 'e.g. Juan Dela Cruz'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          _SectionBlock(
+                            header: _sectionHeader(Icons.school, 'Academic Information', AppColors.primary),
+                            child: Column(
+                              children: [
+                                _FieldRow(
+                                  isMobile: isMobile,
+                                  children: [
+                                    _FieldGroup(
+                                      label: _fieldLabel('Course', required: true),
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedCourse,
+                                        decoration: _inputDecoration(hintText: 'Select course'),
+                                        onChanged: (value) => setState(() => _selectedCourse = value),
+                                        items: _courses.map((course) {
+                                          return DropdownMenuItem(value: course, child: Text(course));
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    _FieldGroup(
+                                      label: _fieldLabel('Year Level', required: true),
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedYear,
+                                        decoration: _inputDecoration(hintText: 'Select year'),
+                                        onChanged: (value) => setState(() => _selectedYear = value),
+                                        items: _yearLevels.map((year) {
+                                          return DropdownMenuItem(value: year, child: Text(year));
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                _FieldRow(
+                                  isMobile: true,
+                                  children: [
+                                    _FieldGroup(
+                                      label: _fieldLabel('Department', required: true),
+                                      child: DropdownButtonFormField<String>(
+                                        value: _selectedDepartment,
+                                        decoration: _inputDecoration(hintText: 'Select department'),
+                                        onChanged: (value) => setState(() => _selectedDepartment = value),
+                                        items: _departments.map((department) {
+                                          return DropdownMenuItem(value: department, child: Text(department));
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          _SectionBlock(
+                            header: _sectionHeader(Icons.warning_amber_rounded, 'Violation Details', AppColors.redAccent),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: _fieldLabel('Violation Type', required: true),
+                                ),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: _violationTypes.map((type) {
+                                    final selected = _selectedViolations.contains(type);
+                                    return SizedBox(
+                                      width: isMobile ? double.infinity : (screenWidth - 120) / 2 - 12,
+                                      child: _ViolationCheckItem(
+                                        label: type,
+                                        selected: selected,
+                                        onTap: () => _toggleViolation(type),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          _SectionBlock(
+                            header: _sectionHeader(Icons.list_alt, 'Additional Details', AppColors.primary),
+                            child: _FieldGroup(
+                              label: _fieldLabel('Description'),
+                              child: TextField(
+                                controller: _descriptionCtrl,
+                                maxLines: 4,
+                                decoration: _inputDecoration(hintText: 'Provide a brief description of the violation...'),
+                              ),
+                            ),
+                          ),
+                          _SectionBlock(
+                            header: _sectionHeader(Icons.edit, 'Student\'s E-Signature', AppColors.redAccent),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                _FieldGroup(
+                                  label: _fieldLabel('Signature', required: true),
+                                  child: GestureDetector(
+                                    onTap: _captureSignature,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF4F5F8),
+                                        borderRadius: BorderRadius.circular(9),
+                                        border: Border.all(color: AppColors.border),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 140,
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.edit_note,
+                                                  size: 28,
+                                                  color: AppColors.muted.withOpacity(0.6),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  _hasSignature ? 'Signature captured' : 'Draw your signature here',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: AppColors.muted.withOpacity(0.8),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFF0F1F6),
+                                              border: Border(top: BorderSide(color: AppColors.border)),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.touch_app, size: 16, color: AppColors.muted),
+                                                    const SizedBox(width: 6),
+                                                    Text(
+                                                      'Tap to sign',
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: AppColors.muted,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                TextButton.icon(
+                                                  onPressed: _clearSignature,
+                                                  icon: const Icon(Icons.rotate_left, color: Color(0xFFCC0000), size: 16),
+                                                  label: const Text(
+                                                    'Clear',
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Color(0xFFCC0000),
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  style: TextButton.styleFrom(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                    minimumSize: Size.zero,
+                                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.all(13),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF0F0),
+                              borderRadius: const BorderRadius.only(topRight: Radius.circular(8), bottomRight: Radius.circular(8)),
+                              border: Border.all(color: const Color(0xFFCC0000)),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Icon(Icons.info, size: 14, color: Color(0xFF7A1010)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'By submitting this report, you confirm that all information provided is accurate and truthful.',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Color(0xFF7A1010),
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _submitViolation,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                'Submit Report',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.07,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 26),
+                        ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 28),
-          // ── Quick Stats ───────────────────────────────────────────────────────
-          const Text('Quick Statistics',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.black87,
-              )),
-          const SizedBox(height: 12),
-          Wrap(
-            runSpacing: 12,
-            spacing: 12,
-            children: const [
-              _StatCard(
-                title: 'Violations Today',
-                value: '12',
-                color: Color(0xFF3B82F6),
-              ),
-              _StatCard(
-                title: 'Pending Review',
-                value: '5',
-                color: Color(0xFFF59E0B),
-              ),
-              _StatCard(
-                title: 'Resolved',
-                value: '3',
-                color: Color(0xFF10B981),
               ),
             ],
           ),
-          const SizedBox(height: 28),
-          // ── Recent Submissions ────────────────────────────────────────────────
-          if (_submissions.isNotEmpty) ...[
-            const Text('Recent Submissions',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black87,
-                )),
-            const SizedBox(height: 12),
-            Column(
-              children: _submissions.map((entry) => _SubmissionCard(entry: entry)).toList(),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
@@ -292,137 +631,163 @@ class _JassuDashboardScreenState extends State<JassuDashboardScreen> {
   void dispose() {
     _studentIdCtrl.dispose();
     _fullNameCtrl.dispose();
-    _violationCtrl.dispose();
+    _descriptionCtrl.dispose();
     super.dispose();
   }
 }
 
-class _ViolationEntry {
-  final String studentId;
-  final String fullName;
-  final String violation;
-  final String type;
-  final DateTime timestamp;
-
-  _ViolationEntry({
-    required this.studentId,
-    required this.fullName,
-    required this.violation,
-    required this.type,
-    required this.timestamp,
-  });
-}
-
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color color;
-
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.color,
-  });
+class _BannerLabel extends StatelessWidget {
+  const _BannerLabel();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(99),
       ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppColors.muted,
-              )),
-          const SizedBox(height: 8),
-          Text(value,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: color,
-              )),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Icon(Icons.shield, size: 12, color: Colors.white70),
+          SizedBox(width: 6),
+          Text(
+            'MCC Discipline Office',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.08,
+              textBaseline: TextBaseline.alphabetic,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class _SubmissionCard extends StatelessWidget {
-  final _ViolationEntry entry;
+class _SectionBlock extends StatelessWidget {
+  final Widget header;
+  final Widget child;
 
-  const _SubmissionCard({required this.entry});
+  const _SectionBlock({required this.header, required this.child});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-      ),
-      padding: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 26),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${entry.fullName} (${entry.studentId})',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                        )),
-                    const SizedBox(height: 4),
-                    Text(entry.violation,
-                        style: const TextStyle(
-                          color: AppColors.muted,
-                          fontSize: 12,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: entry.type == 'Major'
-                      ? Color(0xFFEF4444).withValues(alpha: 0.1)
-                      : Color(0xFFF59E0B).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  entry.type,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: entry.type == 'Major'
-                        ? const Color(0xFFEF4444)
-                        : const Color(0xFFF59E0B),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Submitted: ${entry.timestamp.toString().substring(0, 16)}',
-            style: const TextStyle(fontSize: 11, color: AppColors.muted),
-          ),
+          header,
+          const SizedBox(height: 20),
+          child,
         ],
+      ),
+    );
+  }
+}
+
+class _FieldRow extends StatelessWidget {
+  final List<Widget> children;
+  final bool isMobile;
+
+  const _FieldRow({required this.children, required this.isMobile});
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        children: children
+            .map((child) => Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: child,
+                ))
+            .toList(),
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children
+          .map((child) => Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 14),
+                  child: child,
+                ),
+              ))
+          .toList(),
+    );
+  }
+}
+
+class _FieldGroup extends StatelessWidget {
+  final Widget label;
+  final Widget child;
+
+  const _FieldGroup({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        label,
+        const SizedBox(height: 6),
+        child,
+      ],
+    );
+  }
+}
+
+class _ViolationCheckItem extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _ViolationCheckItem({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(9),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF4F5F8),
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(
+            color: selected ? AppColors.primary : AppColors.border,
+            width: selected ? 1.7 : 1.5,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Checkbox(
+              value: selected,
+              onChanged: (_) => onTap(),
+              activeColor: AppColors.primary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            ),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
