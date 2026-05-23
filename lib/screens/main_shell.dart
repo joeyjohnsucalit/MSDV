@@ -7,7 +7,6 @@ import 'violation_history_screen.dart';
 import 'disciplinary_action_screen.dart';
 import 'risk_level_screen.dart';
 import 'data_backup_screen.dart';
-import 'import_data_screen.dart';
 import 'jassu_users_screen.dart';
 
 const double _kMobileBreak = 768;
@@ -27,26 +26,24 @@ class _MainShellState extends State<MainShell> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String get _pageTitle => switch (_currentPage) {
-        AppPage.dashboard => 'Dashboard',
-        AppPage.studentRecords => 'Student Records',
-        AppPage.violationHistory => 'Violation History',
-        AppPage.disciplinaryAction => 'Disciplinary Actions',
-        AppPage.riskLevel => 'Risk Level Indicator',
-        AppPage.dataBackup => 'Data Backup',
-        AppPage.importData => 'Import Data',
-        AppPage.jassuUsers => 'Jassu Users',
-      };
+    AppPage.dashboard => 'Dashboard',
+    AppPage.studentRecords => 'Student Records',
+    AppPage.violationHistory => 'Violation History',
+    AppPage.disciplinaryAction => 'Disciplinary Actions',
+    AppPage.riskLevel => 'Risk Level Indicator',
+    AppPage.dataBackup => 'Backup',
+    AppPage.jassuUsers => 'CSU Users',
+  };
 
   Widget get _pageContent => switch (_currentPage) {
-        AppPage.dashboard => const DashboardScreen(),
-        AppPage.studentRecords => const StudentRecordsScreen(),
-        AppPage.violationHistory => const ViolationHistoryScreen(),
-        AppPage.disciplinaryAction => const DisciplinaryActionScreen(),
-        AppPage.riskLevel => const RiskLevelScreen(),
-        AppPage.dataBackup => const DataBackupScreen(),
-        AppPage.importData => const ImportDataScreen(),
-        AppPage.jassuUsers => const JassuUsersScreen(),
-      };
+    AppPage.dashboard => const DashboardScreen(),
+    AppPage.studentRecords => const StudentRecordsScreen(),
+    AppPage.violationHistory => const ViolationHistoryScreen(),
+    AppPage.disciplinaryAction => const DisciplinaryActionScreen(),
+    AppPage.riskLevel => const RiskLevelScreen(),
+    AppPage.dataBackup => const DataBackupScreen(),
+    AppPage.jassuUsers => const JassuUsersScreen(),
+  };
 
   void _navigate(AppPage page) {
     setState(() => _currentPage = page);
@@ -59,7 +56,9 @@ class _MainShellState extends State<MainShell> {
     final isMobile = width < _kMobileBreak;
     final isTablet = width >= _kMobileBreak && width < _kTabletBreak;
     final sidebar = SidebarWidget(
-      width: isMobile ? 270 : (isTablet ? _kCompactSidebarWidth : _kSidebarWidth),
+      width: isMobile
+          ? 270
+          : (isTablet ? _kCompactSidebarWidth : _kSidebarWidth),
       currentPage: _currentPage,
       onPageChange: _navigate,
       onLogout: () {
@@ -99,7 +98,11 @@ class _MainShellState extends State<MainShell> {
           child: Row(
             children: [
               SizedBox(width: _kCompactSidebarWidth, child: sidebar),
-              const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE2E8F0)),
+              const VerticalDivider(
+                width: 1,
+                thickness: 1,
+                color: Color(0xFFE2E8F0),
+              ),
               Expanded(child: contentArea),
             ],
           ),
@@ -154,8 +157,7 @@ class _TopNavbar extends StatelessWidget {
           if (showMenu) ...[
             GestureDetector(
               onTap: onMenuTap,
-              child: const Icon(Icons.menu,
-                  color: Colors.white, size: 24),
+              child: const Icon(Icons.menu, color: Colors.white, size: 24),
             ),
             const SizedBox(width: 14),
           ],

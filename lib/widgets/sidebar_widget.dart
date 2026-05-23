@@ -8,7 +8,6 @@ enum AppPage {
   disciplinaryAction,
   riskLevel,
   dataBackup,
-  importData,
   jassuUsers,
 }
 
@@ -86,25 +85,18 @@ class SidebarWidget extends StatelessWidget {
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.riskLevel),
                   ),
-                  _SectionLabel('Backup & Reports'),
+                  _SectionLabel('Backup'),
                   _SidebarItem(
                     icon: Icons.cloud_download,
-                    label: 'Data Backup',
+                    label: 'Backup',
                     page: AppPage.dataBackup,
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.dataBackup),
                   ),
-                  _SidebarItem(
-                    icon: Icons.upload_file,
-                    label: 'Import Data',
-                    page: AppPage.importData,
-                    currentPage: currentPage,
-                    onTap: () => onPageChange(AppPage.importData),
-                  ),
                   _SectionLabel('System'),
                   _SidebarItem(
                     icon: Icons.person,
-                    label: 'Jassu User',
+                    label: 'CSU User',
                     page: AppPage.jassuUsers,
                     currentPage: currentPage,
                     onTap: () => onPageChange(AppPage.jassuUsers),
@@ -266,7 +258,10 @@ class _LogoutItem extends StatelessWidget {
             children: const [
               Icon(Icons.logout, size: 17, color: Colors.black87),
               SizedBox(width: 8),
-              Text('Log Out', style: TextStyle(fontSize: 14, color: Colors.black87)),
+              Text(
+                'Log Out',
+                style: TextStyle(fontSize: 14, color: Colors.black87),
+              ),
             ],
           ),
         ),

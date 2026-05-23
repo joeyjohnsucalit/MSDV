@@ -25,12 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    if (username == 'jassu' && password == 'jassu123') {
+    if (username == 'csu' && password == 'csu123') {
       Navigator.pushReplacementNamed(context, '/jassu');
       return;
     }
 
-    _showError('Invalid credentials. Use admin/admin123 or jassu/jassu123.');
+    _showError('Invalid credentials. Use admin/admin123 or csu/csu123.');
   }
 
   void _showError(String message) {
@@ -82,7 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('USERNAME',
+                        const Text(
+                          'USERNAME',
                           style: TextStyle(
                             color: Color(0x990F1A3B),
                             fontSize: 13,
@@ -153,11 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 12),
                         const Text(
-                          'Temporary accounts: admin/admin123 or jassu/jassu123',
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 12,
-                          ),
+                          'Temporary accounts: admin/admin123 or csu/csu123',
+                          style: TextStyle(color: Colors.black54, fontSize: 12),
                           textAlign: TextAlign.center,
                         ),
                       ],
