@@ -292,23 +292,28 @@ class _ViolationHistoryScreenState extends State<ViolationHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _FilterBar(
-              onSearch: (v) => setState(() => _search = v),
-              onType: (v) => setState(() => _type = v),
-              onStatus: (v) => setState(() => _status = v),
-            ),
-            const SizedBox(height: 16),
-            _ViolationTable(records: _filtered),
-          ],
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final mobile = constraints.maxWidth < 600;
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(mobile ? 16 : 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _FilterBar(
+                onSearch: (v) => setState(() => _search = v),
+                onType: (v) => setState(() => _type = v),
+                onStatus: (v) => setState(() => _status = v),
+              ),
+              const SizedBox(height: 16),
+              _ViolationTable(
+                records: _filtered,
+                availableWidth: constraints.maxWidth - (mobile ? 32 : 48),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -473,7 +478,8 @@ class _InlineDropdownState extends State<_InlineDropdown> {
 
 class _ViolationTable extends StatelessWidget {
   final List<_VRecord> records;
-  const _ViolationTable({required this.records});
+  final double availableWidth;
+  const _ViolationTable({required this.records, required this.availableWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -493,133 +499,136 @@ class _ViolationTable extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: DataTable(
-          headingRowColor: WidgetStateProperty.all(const Color(0xFFf9fafb)),
-          headingTextStyle: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF6b7280),
-            letterSpacing: 0.5,
-          ),
-          dataTextStyle: const TextStyle(
-            fontSize: 13,
-            color: Color(0xFF374151),
-          ),
-          columnSpacing: 16,
-          columns: const [
-            DataColumn(label: Text('STUDENT ID')),
-            DataColumn(label: Text('FULL NAME')),
-            DataColumn(label: Text('TYPE')),
-            DataColumn(label: Text('VIOLATION')),
-            DataColumn(label: Text('DATE')),
-            DataColumn(label: Text('TALLY')),
-            DataColumn(label: Text('STATUS')),
-            DataColumn(label: Text('ACTIONS')),
-          ],
-          rows: records.map((r) {
-            return DataRow(
-              cells: [
-                DataCell(
-                  Text(
-                    r.id,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                      color: Color(0xFF6b7280),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    r.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF111827),
-                    ),
-                  ),
-                ),
-                DataCell(_TypeBadge(r.type)),
-                DataCell(
-                  SizedBox(
-                    width: 180,
-                    child: Text(
-                      r.violation,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    r.date,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF6b7280),
-                    ),
-                  ),
-                ),
-                DataCell(
-                  _TallyPips(
-                    tally: r.tally,
-                    max: r.maxTally,
-                    isMax: r.isMax,
-                    isMajor: r.type == 'Major',
-                  ),
-                ),
-                DataCell(_StatusBadge(r.status)),
-                DataCell(
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.visibility, size: 13),
-                        label: const Text(
-                          'View',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF030357),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: availableWidth),
+          child: DataTable(
+            headingRowColor: WidgetStateProperty.all(const Color(0xFFf9fafb)),
+            headingTextStyle: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF6b7280),
+              letterSpacing: 0.5,
+            ),
+            dataTextStyle: const TextStyle(
+              fontSize: 13,
+              color: Color(0xFF374151),
+            ),
+            columnSpacing: 16,
+            columns: const [
+              DataColumn(label: Text('STUDENT ID')),
+              DataColumn(label: Text('FULL NAME')),
+              DataColumn(label: Text('TYPE')),
+              DataColumn(label: Text('VIOLATION')),
+              DataColumn(label: Text('DATE')),
+              DataColumn(label: Text('TALLY')),
+              DataColumn(label: Text('STATUS')),
+              DataColumn(label: Text('ACTIONS')),
+            ],
+            rows: records.map((r) {
+              return DataRow(
+                cells: [
+                  DataCell(
+                    Text(
+                      r.id,
+                      style: const TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 12,
+                        color: Color(0xFF6b7280),
+                        fontWeight: FontWeight.w600,
                       ),
-                      const SizedBox(width: 5),
-                      OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 5,
-                          ),
-                          side: const BorderSide(color: Color(0xFFe5e7eb)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: const Icon(
-                          Icons.delete_outline,
-                          size: 14,
-                          color: Color(0xFF9ca3af),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          }).toList(),
+                  DataCell(
+                    Text(
+                      r.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF111827),
+                      ),
+                    ),
+                  ),
+                  DataCell(_TypeBadge(r.type)),
+                  DataCell(
+                    SizedBox(
+                      width: 180,
+                      child: Text(
+                        r.violation,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      r.date,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6b7280),
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    _TallyPips(
+                      tally: r.tally,
+                      max: r.maxTally,
+                      isMax: r.isMax,
+                      isMajor: r.type == 'Major',
+                    ),
+                  ),
+                  DataCell(_StatusBadge(r.status)),
+                  DataCell(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.visibility, size: 13),
+                          label: const Text(
+                            'View',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF030357),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 5,
+                            ),
+                            side: const BorderSide(color: Color(0xFFe5e7eb)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Icon(
+                            Icons.delete_outline,
+                            size: 14,
+                            color: Color(0xFF9ca3af),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
